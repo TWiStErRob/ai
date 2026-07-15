@@ -1,0 +1,229 @@
+name: "Validate Skills"
+
+on:
+  workflow_call:
+
+jobs:
+
+  skill:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - .agents
+          - agents
+          - chatgpt
+          - claude
+          - copilot
+          - opencode
+
+    name: "${{ matrix.tool }} skill format"
+    timeout-minutes: 5
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Install the Agent Skills reference validator."
+        # language=bash
+        run: |
+          python -m venv "${RUNNER_TEMP}/skills-ref"
+          "${RUNNER_TEMP}/skills-ref/bin/python" -m pip --disable-pip-version-check install \
+            "skills-ref @ git+https://github.com/agentskills/agentskills.git@0c0c5673846d0a1c983d910b189e329ef3ab8f2a#subdirectory=skills-ref"
+
+      - name: "Validate ${{ matrix.tool }} skills."
+        env:
+          SKILL_ROOT: "${{ matrix.tool }}/skills"
+        # language=bash
+        run: |
+          if [[ ! -d "${SKILL_ROOT}" ]]; then
+            echo "::error::Missing skill root: ${SKILL_ROOT}"
+            exit 1
+          fi
+
+          find -L "${SKILL_ROOT}" -mindepth 1 -maxdepth 1 -type d -print0 \
+            | xargs --null --no-run-if-empty --max-args=1 \
+              "${RUNNER_TEMP}/skills-ref/bin/skills-ref" validate
+
+  no-links:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - .agents
+          - agents
+          - copilot
+          - opencode
+
+    name: "${{ matrix.tool }} skill links"
+    timeout-minutes: 1
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Validate ${{ matrix.tool }} skill sources have no links."
+        env:
+          SKILL_ROOT: "${{ matrix.tool }}/skills"
+        shell: kotlin -howtorun .main.kts {0}
+        # language=main.kts
+        run: |
+          import java.nio.file.Files
+          import java.nio.file.Path
+          import kotlin.system.exitProcess
+
+          val root = Path.of(System.getenv("SKILL_ROOT"))
+          check(Files.isDirectory(root)) { "Missing skill root: $root" }
+
+          val links = Files.newDirectoryStream(root).use { entries ->
+              entries.filter { Files.isSymbolicLink(it) }
+          }
+          links.forEach { link ->
+              println("::error file=${link.toString().replace('\\', '/')}::Canonical skill roots cannot contain symlinks")
+          }
+          if (links.isNotEmpty()) exitProcess(1)
+
+  conflicts:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tool: agents
+            roots: agents/skills
+          - tool: chatgpt
+            roots: chatgpt/skills
+          - tool: claude
+            roots: claude/skills
+          - tool: codex
+            roots: agents/skills
+          - tool: copilot
+            roots: agents/skills copilot/skills
+          - tool: opencode
+            roots: agents/skills claude/skills opencode/skills
+
+    name: "${{ matrix.tool }} skill conflicts"
+    timeout-minutes: 1
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Validate ${{ matrix.tool }} skill conflicts."
+        env:
+          TOOL: "${{ matrix.tool }}"
+          SKILL_ROOTS: "${{ matrix.roots }}"
+        shell: kotlin -howtorun .main.kts {0}
+        # language=main.kts
+        run: |
+          import java.nio.file.Files
+          import java.nio.file.Path
+          import kotlin.system.exitProcess
+
+          val roots = System.getenv("SKILL_ROOTS").split(' ').map { Path.of(it) }
+          val skills = roots.flatMap { root ->
+              check(Files.isDirectory(root)) { "Missing skill root: $root" }
+              Files.newDirectoryStream(root).use { entries ->
+                  entries.filter { Files.isDirectory(it) || Files.isSymbolicLink(it) }
+              }
+          }
+
+          val conflicts = skills
+              .groupBy { it.fileName.toString() }
+              .filterValues { paths -> paths.distinctBy { it.toRealPath() }.size > 1 }
+
+          conflicts.forEach { (name, paths) ->
+              println("::error::${System.getenv("TOOL")} discovers conflicting '$name' skills")
+              paths.forEach { path -> println("$path -> ${path.toRealPath()}") }
+          }
+          if (conflicts.isNotEmpty()) exitProcess(1)
+
+  shared-discovery:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - claude
+
+    name: "${{ matrix.tool }} shared skill discovery"
+    timeout-minutes: 1
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Validate ${{ matrix.tool }} shared skill discovery."
+        env:
+          TOOL: "${{ matrix.tool }}"
+        shell: kotlin -howtorun .main.kts {0}
+        # language=main.kts
+        run: |
+          import java.nio.file.Files
+          import java.nio.file.Path
+          import kotlin.system.exitProcess
+
+          val tool = System.getenv("TOOL")
+          val sharedRoot = Path.of("agents/skills")
+          val toolRoot = Path.of(tool, "skills")
+          check(Files.isDirectory(sharedRoot)) { "Missing shared skill root: $sharedRoot" }
+          check(Files.isDirectory(toolRoot)) { "Missing $tool skill root: $toolRoot" }
+
+          data class SkillProjection(
+              val source: Path,
+              val alias: Path,
+              val target: Path?,
+              val errors: List<String>,
+          )
+
+          val sharedSkills = Files.newDirectoryStream(sharedRoot).use { entries ->
+              entries.filter(Files::isDirectory)
+          }
+          val projections = sharedSkills.map { sharedSkill ->
+              val alias = toolRoot.resolve(sharedSkill.fileName)
+              val target = alias
+                  .takeIf(Files::isSymbolicLink)
+                  ?.let(Files::readSymbolicLink)
+              val errors = buildList {
+                  if (target == null) {
+                      add("$tool must discover shared skill '${sharedSkill.fileName}' through a symlink.")
+                  } else {
+                      if (target.isAbsolute) {
+                          add("Shared skill symlink must be relative: $target")
+                      }
+                      if ('\\' in target.toString()) {
+                          add("Shared skill symlink must use forward slashes: $target")
+                      }
+                      if (!Files.exists(alias)) {
+                          add("Shared skill symlink is broken: $target")
+                      } else if (alias.toRealPath() != sharedSkill.toRealPath()) {
+                          add("Shared skill symlink resolves to ${alias.toRealPath()}, expected ${sharedSkill.toRealPath()}")
+                      }
+                  }
+              }
+              SkillProjection(source = sharedSkill, alias = alias, target = target, errors = errors)
+          }
+
+          projections.forEach { projection ->
+              projection.errors.forEach { error ->
+                  println("::error file=${projection.alias.toString().replace('\\', '/')}::$error")
+              }
+          }
+          if (projections.any { it.errors.isNotEmpty() }) exitProcess(1)

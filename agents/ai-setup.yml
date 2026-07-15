@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=../ai-setup.schema.json
+
+home:
+  default: ~/.agents
+
+links:
+  instructions: instructions
+  skills: skills

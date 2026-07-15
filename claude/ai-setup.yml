@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=../ai-setup.schema.json
+
+home:
+  default: ~/.claude
+  env: CLAUDE_CONFIG_DIR
+
+links:
+  CLAUDE.md: ../agents/instructions/global.md
+  agents: agents
+  hooks: hooks
+  output-styles: output-styles
+  rules: rules
+  settings.json: settings.json
+  skills: skills

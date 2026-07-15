@@ -1,0 +1,35 @@
+name: "CI"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  cancel-in-progress: true
+
+jobs:
+
+  validation:
+    name: "Validation"
+    uses: TWiStErRob/github-workflows/.github/workflows/validate.yml@v3
+    with:
+      gradle: false
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+  setup:
+    name: "Setup"
+    uses: ./.github/workflows/ai-setup-validator.yml
+    permissions:
+      contents: read
+
+  skills:
+    name: "Skills"
+    uses: ./.github/workflows/skill-validator.yml
+    permissions:
+      contents: read

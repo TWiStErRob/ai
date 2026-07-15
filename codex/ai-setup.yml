@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=../ai-setup.schema.json
+
+home:
+  default: ~/.codex
+  env: CODEX_HOME
+
+links:
+  AGENTS.md: ../agents/instructions/global.md
+  agents: agents
+  config.toml: config.toml
+  hooks: hooks
+  rules: rules

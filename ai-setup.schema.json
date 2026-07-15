@@ -1,0 +1,41 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "AI setup manifest",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"home",
+		"links"
+	],
+	"properties": {
+		"home": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"default"
+			],
+			"properties": {
+				"default": {
+					"type": "string",
+					"minLength": 1
+				},
+				"env": {
+					"type": "string",
+					"pattern": "^[A-Z_]+$"
+				}
+			}
+		},
+		"links": {
+			"type": "object",
+			"minProperties": 1,
+			"propertyNames": {
+				"type": "string",
+				"pattern": "^(?!/)(?!~)(?![A-Za-z]:)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^\\x5c]+$"
+			},
+			"additionalProperties": {
+				"type": "string",
+				"pattern": "^(?!/)(?!~)(?![A-Za-z]:)[^\\x5c]+$"
+			}
+		}
+	}
+}
