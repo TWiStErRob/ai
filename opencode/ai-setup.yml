@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=../ai-setup.schema.json
+
+home:
+  default: ~/.config/opencode
+  env: OPENCODE_CONFIG_DIR
+
+links:
+  agents: agents
+  opencode.jsonc: opencode.jsonc
+  plugins: plugins
+  skills: skills

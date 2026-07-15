@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=../ai-setup.schema.json
+
+home:
+  default: ~/.copilot
+  env: COPILOT_HOME
+
+links:
+  agents: agents
+  hooks: hooks
+  instructions: instructions
+  skills: skills
