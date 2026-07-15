@@ -12,6 +12,16 @@ concurrency:
 
 jobs:
 
+  validation:
+    name: "Validation"
+    uses: TWiStErRob/github-workflows/.github/workflows/validate.yml@v3
+    with:
+      gradle: false
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
   setup:
     name: "Setup"
     uses: ./.github/workflows/ai-setup-validator.yml
