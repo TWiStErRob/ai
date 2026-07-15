@@ -1,4 +1,0 @@
-interface:
-  display_name: "Register MCP"
-  short_description: "Register one MCP server across AI tools"
-  default_prompt: "Use $register-mcp to register this repository's MCP server in every supported AI tool."
