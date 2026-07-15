@@ -52,6 +52,48 @@ jobs:
             | xargs --null --no-run-if-empty --max-args=1 \
               "${RUNNER_TEMP}/skills-ref/bin/skills-ref" validate
 
+  no-links:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - .agents
+          - agents
+          - copilot
+          - opencode
+
+    name: "${{ matrix.tool }} skill links"
+    timeout-minutes: 1
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Validate ${{ matrix.tool }} skill sources have no links."
+        env:
+          SKILL_ROOT: "${{ matrix.tool }}/skills"
+        shell: kotlin -howtorun .main.kts {0}
+        # language=main.kts
+        run: |
+          import java.nio.file.Files
+          import java.nio.file.Path
+          import kotlin.system.exitProcess
+
+          val root = Path.of(System.getenv("SKILL_ROOT"))
+          check(Files.isDirectory(root)) { "Missing skill root: $root" }
+
+          val links = Files.newDirectoryStream(root).use { entries ->
+              entries.filter { Files.isSymbolicLink(it) }
+          }
+          links.forEach { link ->
+              println("::error file=${link.toString().replace('\\', '/')}::Canonical skill roots cannot contain symlinks")
+          }
+          if (links.isNotEmpty()) exitProcess(1)
+
   conflicts:
     strategy:
       fail-fast: false
@@ -142,12 +184,12 @@ jobs:
           }
 
           val sharedSkills = Files.newDirectoryStream(sharedRoot).use { entries ->
-              entries.filter { Files.isDirectory(it) }
+              entries.filter(Files::isDirectory)
           }
-          sharedSkills.forEach { shared ->
-              val alias = claudeRoot.resolve(shared.fileName)
+          sharedSkills.forEach { sharedSkill ->
+              val alias = claudeRoot.resolve(sharedSkill.fileName)
               if (!Files.isSymbolicLink(alias)) {
-                  report(alias, "Claude must discover shared skill '${shared.fileName}' through a symlink")
+                  report(alias, "Claude must discover shared skill '${sharedSkill.fileName}' through a symlink.")
                   return@forEach
               }
 
