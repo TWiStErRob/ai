@@ -6,6 +6,10 @@ home:
 
 links:
   agents: agents
+  copilot-instructions.md: ../agents/instructions/global.md
+  extensions: extensions
   hooks: hooks
   instructions: instructions
+  mcp-config.json: mcp-config.json
+  settings.json: settings.json
   skills: skills
