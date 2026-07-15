@@ -152,8 +152,14 @@ jobs:
           }
           if (conflicts.isNotEmpty()) exitProcess(1)
 
-  discovery:
-    name: "claude shared skill discovery"
+  shared-discovery:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - claude
+
+    name: "${{ matrix.tool }} shared skill discovery"
     timeout-minutes: 1
     permissions:
       # actions/checkout
@@ -164,7 +170,9 @@ jobs:
       - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
         uses: actions/checkout@v7
 
-      - name: "Validate Claude shared skill discovery."
+      - name: "Validate ${{ matrix.tool }} shared skill discovery."
+        env:
+          TOOL: "${{ matrix.tool }}"
         shell: kotlin -howtorun .main.kts {0}
         # language=main.kts
         run: |
@@ -172,34 +180,50 @@ jobs:
           import java.nio.file.Path
           import kotlin.system.exitProcess
 
+          val tool = System.getenv("TOOL")
           val sharedRoot = Path.of("agents/skills")
-          val claudeRoot = Path.of("claude/skills")
+          val toolRoot = Path.of(tool, "skills")
           check(Files.isDirectory(sharedRoot)) { "Missing shared skill root: $sharedRoot" }
-          check(Files.isDirectory(claudeRoot)) { "Missing Claude skill root: $claudeRoot" }
+          check(Files.isDirectory(toolRoot)) { "Missing $tool skill root: $toolRoot" }
 
-          var invalid = false
-          fun report(path: Path, message: String) {
-              println("::error file=${path.toString().replace('\\', '/')}::$message")
-              invalid = true
-          }
+          data class SkillProjection(
+              val source: Path,
+              val alias: Path,
+              val target: Path?,
+              val errors: List<String>,
+          )
 
           val sharedSkills = Files.newDirectoryStream(sharedRoot).use { entries ->
               entries.filter(Files::isDirectory)
           }
-          sharedSkills.forEach { sharedSkill ->
-              val alias = claudeRoot.resolve(sharedSkill.fileName)
-              if (!Files.isSymbolicLink(alias)) {
-                  report(alias, "Claude must discover shared skill '${sharedSkill.fileName}' through a symlink.")
-                  return@forEach
+          val projections = sharedSkills.map { sharedSkill ->
+              val alias = toolRoot.resolve(sharedSkill.fileName)
+              val target = alias
+                  .takeIf(Files::isSymbolicLink)
+                  ?.let(Files::readSymbolicLink)
+              val errors = buildList {
+                  if (target == null) {
+                      add("$tool must discover shared skill '${sharedSkill.fileName}' through a symlink.")
+                  } else {
+                      if (target.isAbsolute) {
+                          add("Shared skill symlink must be relative: $target")
+                      }
+                      if ('\\' in target.toString()) {
+                          add("Shared skill symlink must use forward slashes: $target")
+                      }
+                      if (!Files.exists(alias)) {
+                          add("Shared skill symlink is broken: $target")
+                      } else if (alias.toRealPath() != sharedSkill.toRealPath()) {
+                          add("Shared skill symlink resolves to ${alias.toRealPath()}, expected ${sharedSkill.toRealPath()}")
+                      }
+                  }
               }
+              SkillProjection(source = sharedSkill, alias = alias, target = target, errors = errors)
+          }
 
-              val target = Files.readSymbolicLink(alias)
-              when {
-                  target.isAbsolute -> report(alias, "Shared skill symlink must be relative: $target")
-                  '\\' in target.toString() -> report(alias, "Shared skill symlink must use forward slashes: $target")
-                  !Files.exists(alias) -> report(alias, "Shared skill symlink is broken: $target")
-                  alias.toRealPath() != shared.toRealPath() ->
-                      report(alias, "Shared skill symlink resolves to ${alias.toRealPath()}, expected ${shared.toRealPath()}")
+          projections.forEach { projection ->
+              projection.errors.forEach { error ->
+                  println("::error file=${projection.alias.toString().replace('\\', '/')}::$error")
               }
           }
-          if (invalid) exitProcess(1)
+          if (projections.any { it.errors.isNotEmpty() }) exitProcess(1)
