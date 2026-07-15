@@ -13,5 +13,5 @@ Automatic discovery:
    * [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills#about-agent-skills)
 
 Claude [does not discover `~/.agents/skills`](https://code.claude.com/docs/en/skills#where-skills-live),
-so [claude/skills/](./skills) mirrors every shared skill through a relative symlink.
+so [claude/skills/](../claude/skills) mirrors every shared skill through a relative symlink.
 Claude-only skills live directly in the same overlay.

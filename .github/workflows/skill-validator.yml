@@ -52,7 +52,7 @@ jobs:
             | xargs --null --no-run-if-empty --max-args=1 \
               "${RUNNER_TEMP}/skills-ref/bin/skills-ref" validate
 
-  discovery:
+  conflicts:
     strategy:
       fail-fast: false
       matrix:
@@ -70,7 +70,7 @@ jobs:
           - tool: opencode
             roots: agents/skills claude/skills opencode/skills
 
-    name: "${{ matrix.tool }} skill discovery"
+    name: "${{ matrix.tool }} skill conflicts"
     timeout-minutes: 1
     permissions:
       # actions/checkout
@@ -81,7 +81,7 @@ jobs:
       - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
         uses: actions/checkout@v7
 
-      - name: "Validate ${{ matrix.tool }} skill discovery."
+      - name: "Validate ${{ matrix.tool }} skill conflicts."
         env:
           TOOL: "${{ matrix.tool }}"
           SKILL_ROOTS: "${{ matrix.roots }}"
@@ -109,3 +109,55 @@ jobs:
               paths.forEach { path -> println("$path -> ${path.toRealPath()}") }
           }
           if (conflicts.isNotEmpty()) exitProcess(1)
+
+  discovery:
+    name: "claude shared skill discovery"
+    timeout-minutes: 1
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Validate Claude shared skill discovery."
+        shell: kotlin -howtorun .main.kts {0}
+        # language=main.kts
+        run: |
+          import java.nio.file.Files
+          import java.nio.file.Path
+          import kotlin.system.exitProcess
+
+          val sharedRoot = Path.of("agents/skills")
+          val claudeRoot = Path.of("claude/skills")
+          check(Files.isDirectory(sharedRoot)) { "Missing shared skill root: $sharedRoot" }
+          check(Files.isDirectory(claudeRoot)) { "Missing Claude skill root: $claudeRoot" }
+
+          var invalid = false
+          fun report(path: Path, message: String) {
+              println("::error file=${path.toString().replace('\\', '/')}::$message")
+              invalid = true
+          }
+
+          val sharedSkills = Files.newDirectoryStream(sharedRoot).use { entries ->
+              entries.filter { Files.isDirectory(it) }
+          }
+          sharedSkills.forEach { shared ->
+              val alias = claudeRoot.resolve(shared.fileName)
+              if (!Files.isSymbolicLink(alias)) {
+                  report(alias, "Claude must discover shared skill '${shared.fileName}' through a symlink")
+                  return@forEach
+              }
+
+              val target = Files.readSymbolicLink(alias)
+              when {
+                  target.isAbsolute -> report(alias, "Shared skill symlink must be relative: $target")
+                  '\\' in target.toString() -> report(alias, "Shared skill symlink must use forward slashes: $target")
+                  !Files.exists(alias) -> report(alias, "Shared skill symlink is broken: $target")
+                  alias.toRealPath() != shared.toRealPath() ->
+                      report(alias, "Shared skill symlink resolves to ${alias.toRealPath()}, expected ${shared.toRealPath()}")
+              }
+          }
+          if (invalid) exitProcess(1)
