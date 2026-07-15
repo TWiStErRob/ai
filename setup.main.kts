@@ -1,5 +1,5 @@
 @file:DependsOn("org.snakeyaml:snakeyaml-engine:3.0.1")
-@file:DependsOn("dev.harrel:json-schema:1.9.0")
+@file:DependsOn("dev.harrel:json-schema:1.9.1")
 @file:DependsOn("com.fasterxml.jackson.core:jackson-databind:2.20.1")
 
 import com.fasterxml.jackson.databind.JsonNode
