@@ -86,7 +86,7 @@ jobs:
           TOOL: "${{ matrix.tool }}"
           SKILL_ROOTS: "${{ matrix.roots }}"
         shell: kotlin -howtorun .main.kts {0}
-        # language=kotlin
+        # language=main.kts
         run: |
           import java.nio.file.Files
           import java.nio.file.Path

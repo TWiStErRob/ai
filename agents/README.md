@@ -2,19 +2,16 @@
 
 This directory is the canonical cross-tool baseline:
 
-- `instructions/global.md` is referenced or linked from each tool's global
-  instruction entrypoint.
-- `skills/` contains portable skills following the
-  [Agent Skills specification](https://agentskills.io/specification). A
-  tool-specific skill belongs in that tool's `skills/` overlay.
+- `instructions/global.md` is referenced or linked from each tool's global instruction entrypoint.
+- `skills/` contains portable skills following the [Agent Skills specification](https://agentskills.io/specification).
+- A tool-specific skill belongs in that tool's `skills/` overlay.
 
-[Codex](https://learn.chatgpt.com/docs/build-skills),
-[OpenCode](https://opencode.ai/docs/skills#place-files), and
-[GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills#about-agent-skills)
-discover personal skills from `~/.agents/skills`. Claude documents only
-[`~/.claude/skills`](https://code.claude.com/docs/en/skills#where-skills-live),
-so `claude/skills/` contains relative symlinks to the shared skills selected for
-Claude.
+Automatic discovery:
+ * `~/.agents/skills` is automatically discovered by these:
+   * [Codex](https://learn.chatgpt.com/docs/build-skills)
+   * [OpenCode](https://opencode.ai/docs/skills#place-files)
+   * [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills#about-agent-skills)
 
-CI rejects duplicate skill names within a tool's effective discovery set unless
-every occurrence is the same canonical skill.
+Claude [does not discover `~/.agents/skills`](https://code.claude.com/docs/en/skills#where-skills-live),
+so [claude/skills/](./skills) mirrors every shared skill through a relative symlink.
+Claude-only skills live directly in the same overlay.
