@@ -1,6 +1,5 @@
 # GitHub Copilot configuration
 
-Personal MCP registrations belong in [`mcp-config.json`](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference#mcp-server-configuration).
 Keep `config.json`, permissions, OAuth material, secrets, installed plugins, and session state external.
 Merge the existing machine's `settings.json` into this overlay before running setup.
 
@@ -15,6 +14,6 @@ An example could be `P:\caches\ai\copilot`.
 
 It relocates the whole `~/.copilot` directory, including configuration, sessions, plugins, permissions, and logs,
 so it stays outside this repository.
-Link durable entries such as `settings.json`, instructions, agents, skills, hooks, and MCP definitions back to this overlay.
+Link durable entries such as `settings.json`, instructions, agents, skills, and hooks back to this overlay.
 The complete distinction between user-editable and automatically managed files
 is documented in the [`~/.copilot` directory reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference).

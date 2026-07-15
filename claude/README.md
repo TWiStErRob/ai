@@ -9,10 +9,6 @@ Other shared config:
  * [`settings.json`](https://code.claude.com/docs/en/configuration) contains durable personal settings and hook definitions;
  * `hooks/` contains scripts referenced by those settings.
  * Claude also discovers personal [`rules/` and `output-styles/`](https://code.claude.com/docs/en/claude-directory).
- * User-scoped MCP registrations live in `~/.claude.json`, alongside mutable account and project state ([MCP scopes](https://code.claude.com/docs/en/mcp#mcp-installation-scopes)).
-   Do not symlink or commit that file.
-
-Keep server implementations in `mcps/` and use the repository's `register-mcp` skill to register them safely.
 
 ## Relocation
 

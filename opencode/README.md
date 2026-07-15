@@ -2,7 +2,7 @@
 
 Global instructions use OpenCode's [`AGENTS.md`](https://opencode.ai/docs/rules#global) entrypoint.
 
-Runtime settings and MCP registrations remain in `opencode.jsonc`;
+Runtime settings remain in `opencode.jsonc`;
 TUI settings use the separate [`tui.jsonc`](https://opencode.ai/docs/config/#tui).
 The other linked directories are OpenCode's [documented](https://opencode.ai/docs/config/#locations)
 `commands/`, `modes/`, `plugins/`, `skills/`, `themes/`, and `tools/` roots.

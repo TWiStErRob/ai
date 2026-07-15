@@ -10,6 +10,5 @@ links:
   extensions: extensions
   hooks: hooks
   instructions: instructions
-  mcp-config.json: mcp-config.json
   settings.json: settings.json
   skills: skills

@@ -2,7 +2,7 @@
 
 Personal skills remain under the documented [`~/.agents/skills`](https://learn.chatgpt.com/docs/build-skills) root.
 
-Durable settings and MCP registrations belong in [`config.toml`](https://learn.chatgpt.com/docs/extend/mcp#connect-codex-to-an-mcp-server).
+Durable settings belong in [`config.toml`](https://learn.chatgpt.com/docs/config-file/config-reference).
 Codex also discovers personal command rules from [`rules/`](https://learn.chatgpt.com/docs/agent-configuration/rules).
 
 Beware that a local `config.toml` contains a lot of other things,
