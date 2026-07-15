@@ -7,4 +7,6 @@ home:
 links:
   AGENTS.md: ../agents/instructions/global.md
   agents: agents
+  config.toml: config.toml
   hooks: hooks
+  rules: rules
