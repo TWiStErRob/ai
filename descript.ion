@@ -1,0 +1,6 @@
+agents ~/.agents
+chatgpt https://chatgpt.com/skills
+claude ~/.claude/*
+codex ~/.codex/*
+copilot ~/.copilot/*
+opencode ~/.config/opencode/*
