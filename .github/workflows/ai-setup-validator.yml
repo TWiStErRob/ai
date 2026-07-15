@@ -45,13 +45,14 @@ jobs:
       - name: "Configure isolated ${{ matrix.tool }} home."
         env:
           TOOL_HOME: "${{ runner.temp }}/tool-home"
+        # language=bash
         run: |
           case "${TOOL}" in
-            agents) echo "JAVA_TOOL_OPTIONS=-Duser.home=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
-            claude) echo "CLAUDE_CONFIG_DIR=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
-            codex) echo "CODEX_HOME=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
-            copilot) echo "COPILOT_HOME=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
-            opencode) echo "OPENCODE_CONFIG_DIR=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
+            agents) echo "JAVA_TOOL_OPTIONS=-Duser.home=${TOOL_HOME}" | tee --append "${GITHUB_ENV}" ;;
+            claude) echo "CLAUDE_CONFIG_DIR=${TOOL_HOME}" | tee --append "${GITHUB_ENV}" ;;
+            codex) echo "CODEX_HOME=${TOOL_HOME}" | tee --append "${GITHUB_ENV}" ;;
+            copilot) echo "COPILOT_HOME=${TOOL_HOME}" | tee --append "${GITHUB_ENV}" ;;
+            opencode) echo "OPENCODE_CONFIG_DIR=${TOOL_HOME}" | tee --append "${GITHUB_ENV}" ;;
             *) exit 2 ;;
           esac
 
