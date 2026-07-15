@@ -1,0 +1,67 @@
+name: "Validate AI Setup"
+
+on:
+  workflow_call:
+
+jobs:
+
+  setup:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - macos-26
+          - windows-2025
+        tool:
+          - agents
+          - claude
+          - codex
+          - copilot
+          - opencode
+
+    name: "Setup ${{ matrix.tool }} (${{ matrix.os }})"
+    timeout-minutes: 5
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TOOL: ${{ matrix.tool }}
+    steps:
+
+      - name: "Enable symbolic-link checkout on Windows."
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: git config --global core.symlinks true
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Configure isolated ${{ matrix.tool }} home."
+        env:
+          TOOL_HOME: "${{ runner.temp }}/tool-home"
+        run: |
+          case "${TOOL}" in
+            agents) echo "JAVA_TOOL_OPTIONS=-Duser.home=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
+            claude) echo "CLAUDE_CONFIG_DIR=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
+            codex) echo "CODEX_HOME=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
+            copilot) echo "COPILOT_HOME=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
+            opencode) echo "OPENCODE_CONFIG_DIR=${TOOL_HOME}" >> "${GITHUB_ENV}" ;;
+            *) exit 2 ;;
+          esac
+
+      - name: "Show Kotlin version."
+        run: kotlin -version
+
+      - name: "Dry-run ${{ matrix.tool }} setup."
+        run: kotlin setup.main.kts --dry-run "${TOOL}"
+
+      - name: "Install ${{ matrix.tool }} setup."
+        run: kotlin setup.main.kts "${TOOL}"
+
+      - name: "Verify ${{ matrix.tool }} setup is idempotent."
+        run: kotlin setup.main.kts --dry-run "${TOOL}"

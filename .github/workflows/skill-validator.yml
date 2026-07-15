@@ -1,0 +1,111 @@
+name: "Validate Skills"
+
+on:
+  workflow_call:
+
+jobs:
+
+  skill:
+    strategy:
+      fail-fast: false
+      matrix:
+        tool:
+          - agents
+          - chatgpt
+          - claude
+          - copilot
+          - opencode
+
+    name: "${{ matrix.tool }} skill format"
+    timeout-minutes: 5
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    env:
+      SKILLS_REF_HOME: "${{ runner.temp }}/skills-ref"
+      SKILL_ROOT: "${{ matrix.tool }}/skills"
+    defaults:
+      run:
+        shell: bash
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Install the Agent Skills reference validator."
+        # language=bash
+        run: |
+          python -m venv "${SKILLS_REF_HOME}"
+          "${SKILLS_REF_HOME}/bin/python" -m pip --disable-pip-version-check install \
+            "skills-ref @ git+https://github.com/agentskills/agentskills.git@0c0c5673846d0a1c983d910b189e329ef3ab8f2a#subdirectory=skills-ref"
+
+      - name: "Validate ${{ matrix.tool }} skills."
+        # language=bash
+        run: |
+          if [[ ! -d "${SKILL_ROOT}" ]]; then
+            echo "::error::Missing skill root: ${SKILL_ROOT}"
+            exit 1
+          fi
+
+          find -L "${SKILL_ROOT}" -mindepth 1 -maxdepth 1 -type d -print0 \
+            | xargs --null --no-run-if-empty --max-args=1 \
+              "${SKILLS_REF_HOME}/bin/skills-ref" validate
+
+  discovery:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tool: agents
+            roots: agents/skills
+          - tool: chatgpt
+            roots: chatgpt/skills
+          - tool: claude
+            roots: claude/skills
+          - tool: codex
+            roots: agents/skills
+          - tool: copilot
+            roots: agents/skills copilot/skills
+          - tool: opencode
+            roots: agents/skills claude/skills opencode/skills
+
+    name: "${{ matrix.tool }} skill discovery"
+    timeout-minutes: 1
+    permissions:
+      # actions/checkout
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+
+      - name: "Checkout ${{ github.ref }} branch in ${{ github.repository }} repository."
+        uses: actions/checkout@v7
+
+      - name: "Validate ${{ matrix.tool }} skill discovery."
+        env:
+          TOOL: "${{ matrix.tool }}"
+          SKILL_ROOTS: "${{ matrix.roots }}"
+        shell: kotlin -howtorun .main.kts {0}
+        # language=kotlin
+        run: |
+          import java.nio.file.Files
+          import java.nio.file.Path
+          import kotlin.system.exitProcess
+
+          val roots = System.getenv("SKILL_ROOTS").split(' ').map { Path.of(it) }
+          val skills = roots.flatMap { root ->
+              check(Files.isDirectory(root)) { "Missing skill root: $root" }
+              Files.newDirectoryStream(root).use { entries ->
+                  entries.filter { Files.isDirectory(it) || Files.isSymbolicLink(it) }
+              }
+          }
+
+          val conflicts = skills
+              .groupBy { it.fileName.toString() }
+              .filterValues { paths -> paths.distinctBy { it.toRealPath() }.size > 1 }
+
+          conflicts.forEach { (name, paths) ->
+              println("::error::${System.getenv("TOOL")} discovers conflicting '$name' skills")
+              paths.forEach { path -> println("$path -> ${path.toRealPath()}") }
+          }
+          if (conflicts.isNotEmpty()) exitProcess(1)

@@ -1,0 +1,25 @@
+name: "CI"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  cancel-in-progress: true
+
+jobs:
+
+  setup:
+    name: "Setup"
+    uses: ./.github/workflows/ai-setup-validator.yml
+    permissions:
+      contents: read
+
+  skills:
+    name: "Skills"
+    uses: ./.github/workflows/skill-validator.yml
+    permissions:
+      contents: read
