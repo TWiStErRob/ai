@@ -10,6 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         tool:
+          - .agents
           - agents
           - chatgpt
           - claude

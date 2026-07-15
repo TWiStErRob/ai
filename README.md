@@ -6,6 +6,10 @@ GitHub Copilot, and ChatGPT web.
 ## Layout
 
 - `agents/` is the canonical cross-tool instruction and skill baseline.
+- `.agents/skills/` contains intentionally active workflows for maintaining this
+  repository itself.
+- `mcps/` contains canonical MCP server implementations; registrations remain
+  in each tool's native configuration.
 - `codex/`, `claude/`, `opencode/`, and `copilot/` are tool-specific overlays;
   `chatgpt/` holds the future ChatGPT web package. Their plain names are
   intentional: native dot-directories would become active project configuration

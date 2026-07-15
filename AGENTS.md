@@ -41,6 +41,10 @@ to native home paths. The root `AGENTS.md` is intentional repository guidance;
 other native project configuration should be added only when it is meant to
 affect work on this repository itself.
 
+The root `.agents/skills/` directory is likewise intentional repository
+configuration. Keep only workflows for maintaining this repository there;
+globally reusable skills belong under the inert `agents/skills/` source.
+
 Global instruction entrypoints need extra care because names such as
 `AGENTS.md` and `CLAUDE.md` can also be discovered below the repository root.
 Prefer linking the installed entrypoint directly to a canonical instruction
