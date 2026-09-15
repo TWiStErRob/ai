@@ -1,0 +1,14 @@
+interface:
+  display_name: go list event research
+  short_description: Research an event or experience from a supplied link and add
+    or update it in the user's Notion Go-list, following existing database conventions
+    and asking before creating any new Place.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
