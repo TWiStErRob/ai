@@ -1,0 +1,16 @@
+name: "Publish"
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+
+  chatgpt:
+    name: "ChatGPT"
+    uses: ./.github/workflows/package-chatgpt.yml
+    with:
+      release_tag: ${{ github.event.release.tag_name }}
+    permissions:
+      contents: write

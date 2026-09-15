@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=../ai-setup.schema.json
+
+home:
+  # ChatGPT web has no local tool home; this keeps the manifest compatible with
+  # the repository-wide ai-setup schema. The links below are also the explicit
+  # allow-list used for ChatGPT package/export/deploy workflows.
+  default: ~/.chatgpt
+
+links:
+  skills/notion-content-ingest: ../agents/skills/notion-content-ingest
+  skills/notion-event-ingest: ../agents/skills/notion-event-ingest
