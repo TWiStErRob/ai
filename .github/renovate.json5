@@ -3,4 +3,18 @@
 	extends: [
 		"local>TWiStErRob/renovate-config",
 	],
+	customManagers: [
+		{
+			customType: "regex",
+			managerFilePatterns: [
+				".github/workflows/skill-validator.yml",
+			],
+			matchStrings: [
+				"skills-ref @ git\\+https://github\\.com/agentskills/agentskills\\.git@(?<currentDigest>[0-9a-f]{40})#subdirectory=skills-ref",
+			],
+			currentValueTemplate: "main",
+			packageNameTemplate: "https://github.com/agentskills/agentskills",
+			datasourceTemplate: "git-refs",
+		},
+	],
 }
