@@ -36,7 +36,7 @@ jobs:
         run: |
           python -m venv "${RUNNER_TEMP}/skills-ref"
           "${RUNNER_TEMP}/skills-ref/bin/python" -m pip --disable-pip-version-check install \
-            "skills-ref @ git+https://github.com/agentskills/agentskills.git@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref"
+            "skills-ref @ git+https://github.com/agentskills/agentskills.git@0c0c5673846d0a1c983d910b189e329ef3ab8f2a#subdirectory=skills-ref"
 
       - name: "Validate ${{ matrix.tool }} skills."
         env:

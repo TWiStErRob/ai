@@ -38,4 +38,4 @@ jobs:
     name: "ChatGPT"
     uses: ./.github/workflows/package-chatgpt.yml
     permissions:
-      contents: read
+      contents: write
