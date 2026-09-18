@@ -33,3 +33,9 @@ jobs:
     uses: ./.github/workflows/skill-validator.yml
     permissions:
       contents: read
+
+  chatgpt:
+    name: "ChatGPT"
+    uses: ./.github/workflows/package-chatgpt.yml
+    permissions:
+      contents: write

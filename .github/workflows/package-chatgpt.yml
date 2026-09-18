@@ -1,0 +1,52 @@
+name: "Package ChatGPT Skills"
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      release_tag:
+        description: "Optional existing GitHub Release tag to attach the ZIP files to."
+        required: false
+        type: string
+        default: ""
+
+concurrency:
+  group: chatgpt-package-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    name: "Package"
+    timeout-minutes: 10
+    permissions:
+      # Read is enough for CI callers.
+      # A release caller grants contents:write for release upload.
+      contents: write
+    runs-on: ubuntu-24.04
+    defaults: 
+      run:
+        shell: bash
+    steps:
+
+      - name: "Checkout ${{ github.ref }}."
+        uses: actions/checkout@v7
+
+      - name: "Package allow-listed ChatGPT skills."
+        working-directory: chatgpt
+        # language=bash
+        run: ./package.sh dist
+
+      - name: "Upload ChatGPT skill workflow artifact."
+        uses: actions/upload-artifact@v7
+        with:
+          name: chatgpt-skills
+          path: chatgpt/dist/*.zip
+          if-no-files-found: error
+
+      - name: "Attach ChatGPT skill ZIPs to release."
+        if: ${{ inputs.release_tag != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        # language=bash
+        run: gh release upload "${RELEASE_TAG}" chatgpt/dist/*.zip --clobber

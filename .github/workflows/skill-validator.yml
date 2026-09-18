@@ -59,6 +59,7 @@ jobs:
         tool:
           - .agents
           - agents
+          - chatgpt
           - copilot
           - opencode
 
