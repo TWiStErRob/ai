@@ -8,5 +8,3 @@ home:
 
 links:
   skills/skills-maintainer: ../agents/skills/skills-maintainer
-  skills/notion-content-ingest: ../agents/skills/notion-content-ingest
-  skills/notion-event-ingest: ../agents/skills/notion-event-ingest
