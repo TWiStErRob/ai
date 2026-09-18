@@ -2,6 +2,7 @@
 
 `chatgpt/ai-setup.yml` is the allow-list for skills managed in ChatGPT web.
 Each `skills/<name>` link points at the canonical self-contained skill directory.
+ChatGPT-only skills live under `chatgpt/skills/`; cross-tool skills remain under `agents/skills/`.
 Packaging writes them to the ignored `chatgpt/dist/` directory.
 The source skill contents are preserved as-is except when a link renames a skill;
 then the packaged `SKILL.md` frontmatter name is changed to match its exported directory.

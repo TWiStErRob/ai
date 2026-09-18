@@ -7,4 +7,4 @@ home:
   default: ~/.chatgpt
 
 links:
-  skills/skills-maintainer: ../agents/skills/skills-maintainer
+  skills/skills-maintainer: skills/skills-maintainer

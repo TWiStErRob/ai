@@ -6,14 +6,18 @@ set -euo pipefail
 # Run from the chatgpt/ directory with one output-directory argument.
 # Expected input structure:
 #
-#   chatgpt/
-#   ├── ai-setup.yml
-#   └── package.sh
-#   agents/skills/<source-name>/
+#   /
+#   ├── agents/skills/<source-name>/   # shared source alternative
+#   └── chatgpt/
+#       ├── ai-setup.yml
+#       ├── package.sh
+#       └── skills/<source-name>/      # ChatGPT-only source alternative
+#
+#   <source-name>/
 #   ├── SKILL.md
-#   ├── agents/openai.yaml        # optional
-#   ├── assets/                   # optional
-#   └── references/               # optional
+#   ├── agents/openai.yaml             # optional
+#   ├── assets/                        # optional
+#   └── references/                    # optional
 #
 # Each ai-setup.yml link maps an exported target such as skills/<name> to a self-contained source directory.
 # Relative source paths are resolved from chatgpt/.
