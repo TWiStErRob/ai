@@ -1,5 +1,5 @@
 ---
-name: notion-ingest-content
+name: notion-ingest-contents
 description: |
   Add URLs to Notion Contents / Reading List / Bookmarks database.
   Research titles, dates, types, Topics, and Authors;
@@ -7,7 +7,7 @@ description: |
   then prefer one consolidated verified write.
 ---
 
-# Notion Content Ingest
+# Notion Contents Ingest
 
 Use this skill when the user asks to add one or more URLs to their Notion **Contents / Reading List / Bookmarks** database.
 

@@ -1,5 +1,5 @@
 ---
-name: notion-ingest-event
+name: notion-ingest-golist
 description: |
   Trigger when user asks to save/add/record/research/remember
   an event/performance/experience/show/festival/walk/trip/activity/etc.
@@ -8,7 +8,7 @@ description: |
   or an attached poster/flyer/photo/screenshot depicting/describing an event.
 ---
 
-# Go-list Event Research
+# Notion Go-list Ingest
 
 Use this skill when the user gives a link and asks to add an event, experience, attraction, show, festival, exhibition, walk, trip idea, or similar item to their **Go-list**.
 
