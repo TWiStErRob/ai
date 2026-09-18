@@ -1,5 +1,5 @@
 interface:
-  display_name: go list event research
+  display_name: Notion Event Ingest
   short_description: Research an event or experience from a supplied link and add
     or update it in the user's Notion Go-list, following existing database conventions
     and asking before creating any new Place.

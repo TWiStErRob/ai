@@ -1,5 +1,5 @@
 interface:
-  display_name: notion content ingest
+  display_name: Notion Content Ingest
   short_description: Add URLs to the user's Notion Contents / Reading List / Bookmarks
     database. Research titles, dates, types, Topics, and Authors; show a readable
     review table; prevent duplicates; then prefer one consolidated verified write.

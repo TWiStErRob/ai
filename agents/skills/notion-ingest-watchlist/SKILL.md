@@ -1,5 +1,5 @@
 ---
-name: notion-watchlist-ingest
+name: notion-ingest-watchlist
 description: |
   Save or log films, series, and cinema screenings in the user's Notion Watchlist
   from titles, links, screenshots, or booking emails such as Cineworld tickets.

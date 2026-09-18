@@ -1,5 +1,5 @@
 ---
-name: notion-event-ingest
+name: notion-ingest-event
 description: |
   Trigger when user asks to save/add/record/research/remember
   an event/performance/experience/show/festival/walk/trip/activity/etc.

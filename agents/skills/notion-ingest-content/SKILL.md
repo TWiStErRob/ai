@@ -1,5 +1,5 @@
 ---
-name: notion-content-ingest
+name: notion-ingest-content
 description: |
   Add URLs to Notion Contents / Reading List / Bookmarks database.
   Research titles, dates, types, Topics, and Authors;
