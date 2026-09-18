@@ -17,12 +17,15 @@ concurrency:
 jobs:
   package:
     name: "Package"
-    runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
       # Read is enough for CI callers.
       # A release caller grants contents:write for release upload.
       contents: write
+    runs-on: ubuntu-24.04
+    defaults: 
+      run:
+        shell: bash
     steps:
 
       - name: "Checkout ${{ github.ref }}."
@@ -30,7 +33,6 @@ jobs:
 
       - name: "Package allow-listed ChatGPT skills."
         working-directory: chatgpt
-        shell: bash
         # language=bash
         run: ./package.sh dist
 
@@ -46,6 +48,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.release_tag }}
-        shell: bash
         # language=bash
         run: gh release upload "${RELEASE_TAG}" chatgpt/dist/*.zip --clobber
