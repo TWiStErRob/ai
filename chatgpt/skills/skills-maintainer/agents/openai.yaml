@@ -1,13 +1,21 @@
 interface:
-  display_name: "Skills Maintainer"
-  short_description: "Sync live ChatGPT skills with Git history"
-  default_prompt: "Use $skills-maintainer to improve a live ChatGPT skill and preserve the exact result in GitHub."
+  display_name: Skills Maintainer
+  short_description: Sync live ChatGPT skills with Git history
+  default_prompt: Use $skills-maintainer to improve a live ChatGPT skill and preserve
+    the exact result in GitHub.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
 dependencies:
   tools:
-    - type: "mcp"
-      value: "github"
-      description: "Read and write the Git repository that records managed skills."
-      transport: "streamable_http"
-      url: "https://api.githubcopilot.com/mcp/"
+  - type: mcp
+    value: github
+    description: Read and write the Git repository that records managed skills.
+    transport: streamable_http
+    url: https://api.githubcopilot.com/mcp/
 policy:
   allow_implicit_invocation: true
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
