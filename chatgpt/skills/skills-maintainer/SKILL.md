@@ -24,10 +24,9 @@ If either capability is unavailable, complete the safe portion only and report e
 Never claim that a skill was updated or recorded without reading it back from that surface.
 
 Before changing an installed ChatGPT personal skill, load and follow the current `skill-creator` skill.
-It defines the authoritative personal-skills checkout and save procedure. In ChatGPT Work, start with
-`SKILLS_ROOT=/root/.codex/skills/remote-skills`; this directory is the checkout even though
-`/root/.codex/skills` is not a Git repository and the Git metadata is stored separately.
-Do not mistake the parent directory, a `skills.read` snapshot, or an ordinary scratch copy for the editable installation.
+Treat its operation routing, checkout location, save procedure, and post-save verification rules as authoritative.
+Do not rediscover or duplicate those implementation details here, and do not substitute a parent directory,
+`skills.read` snapshot, or ordinary scratch copy for the installation it identifies.
 
 ## Configured source
 
