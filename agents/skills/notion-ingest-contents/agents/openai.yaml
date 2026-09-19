@@ -1,6 +1,6 @@
 interface:
   display_name: Notion Contents Ingest
-  short_description: "Save links to your Notion reading list"
+  short_description: Save to Notion "Contents / Reading List / Bookmarks" database
   icon_small: assets/icon.svg
   icon_large: assets/icon.svg
 policy:

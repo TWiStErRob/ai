@@ -1,6 +1,6 @@
 interface:
   display_name: Skills Maintainer
-  short_description: "Sync skills between ChatGPT and GitHub"
+  short_description: Sync skills between ChatGPT Plugins/Skills and GitHub AI repo
   default_prompt: Use $skills-maintainer to improve a live ChatGPT skill and preserve
     the exact result in GitHub.
   icon_small: assets/icon.svg
