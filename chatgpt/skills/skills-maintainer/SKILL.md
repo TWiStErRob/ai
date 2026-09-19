@@ -23,6 +23,12 @@ Keep live ChatGPT skills useful immediately while preserving Git as their durabl
 If either capability is unavailable, complete the safe portion only and report exactly which side remains unsynchronized.
 Never claim that a skill was updated or recorded without reading it back from that surface.
 
+Before changing an installed ChatGPT personal skill, load and follow the current `skill-creator` skill.
+It defines the authoritative personal-skills checkout and save procedure. In ChatGPT Work, start with
+`SKILLS_ROOT=/root/.codex/skills/remote-skills`; this directory is the checkout even though
+`/root/.codex/skills` is not a Git repository and the Git metadata is stored separately.
+Do not mistake the parent directory, a `skills.read` snapshot, or an ordinary scratch copy for the editable installation.
+
 ## Configured source
 
 Use `TWiStErRob/ai` GitHub repository and its `main` branch by default.
@@ -50,9 +56,20 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 - Validate `SKILL.md` frontmatter and internal relative references before updating either side.
 - Preserve unrelated files and unrelated skills.
 - Apply intentional deletions on both sides; otherwise Git would not reproduce the live skill.
+- For an explicit Git-to-live sync, the mapped Git tree is authoritative for every authored file,
+  including `SKILL.md` name and description, `agents/openai.yaml`, assets, references, scripts, and deletions.
+  Do not preserve a conflicting live name, alias, icon, or instruction merely because it was already installed.
 - When a projection renames a skill, rewrite only the `SKILL.md` frontmatter `name` at the boundary.
   The live name matches the projection directory; the Git name matches the canonical source directory.
+  Determine this transformation exclusively from the current allow-list mapping; never infer it from the installed name.
 - Do not treat API-hosted skills and ChatGPT workspace skills as interchangeable resources.
+
+After saving a personal skill, wait for reconciliation, fetch the personal-skills remote, and verify its resulting tree.
+The current conversation's `skills.read` result and Skills UI may be cached and are not valid deployment read-backs.
+Reconciliation can materialize platform-managed UI metadata or icons. Compare the reconciled tree with the intended
+projection, distinguish those rewrites from the authored Git input, and never silently call a mismatch synchronized.
+If reconciliation replaces an authored file, restore it and retry once; if it is replaced again, report the exact
+remaining platform drift instead of repeatedly overwriting it.
 
 ## Live ChatGPT to Git
 
@@ -101,13 +118,14 @@ Preserve or return the complete exported bundle when possible and report **ChatG
 
 1. Read current `main` and the allow-list.
 2. Resolve the requested skill or managed skill set to canonical directories.
-3. Inspect installed versions before replacing anything.
-4. If a live skill contains changes absent from Git,
-   report the drift and request direction unless the user explicitly asked to discard it.
-5. Build the live projection from Git: preserve the complete tree, use the allow-list target directory name,
-   rewrite only the frontmatter name when aliased, and exclude build output and authentication material.
-6. Validate the projection, update it in ChatGPT, and read it back.
-7. Report the exact source commit and whether the installed skill matches it after documented projection transformations.
+3. Inspect installed versions before replacement so the discarded drift can be reported, not preserved.
+   An explicit request to sync, restore, deploy, or update from Git authorizes replacing that drift with Git.
+4. Build the live projection from Git: preserve the complete tree, use the allow-list target directory name,
+   rewrite only the frontmatter name when the allow-list actually aliases it, and exclude build output and authentication material.
+5. Validate and save each projected skill through the personal-skills checkout, one skill operation at a time.
+6. Wait for reconciliation, fetch the personal-skills remote, and compare the resulting complete tree with the projection.
+   Retry an authored-file rewrite once, then report persistent platform drift precisely.
+7. Report the exact source commit and whether the reconciled installed skill matches it after documented transformations.
 
 Handle multiple skills independently so one failure does not obscure the others.
 
