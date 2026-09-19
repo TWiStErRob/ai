@@ -1,5 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <title>Notion Go-list: places and experiences</title>
   <path d="M18 9c0 5-8 12-8 12S2 14 2 9a8 8 0 1 1 16 0Z" fill="#FFEDD5" stroke="#C2410C" stroke-width="1.5" stroke-linejoin="round"/>
   <circle cx="10" cy="8.5" r="3" fill="#F97316"/>
   <rect x="12" y="12" width="11" height="11" rx="1.5" fill="white" stroke="#202020" stroke-width="1.25"/>
