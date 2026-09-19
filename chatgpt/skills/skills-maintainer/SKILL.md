@@ -62,11 +62,16 @@ retry only when there is evidence that a changed approach can succeed.
 ## Live ChatGPT to Git
 
 1. Read the latest `main` commit, the allow-list, and the mapped canonical skill tree.
-2. Compare the installed skill with Git and identify the live changes to record; reconcile independently changed Git content without replacing the live source.
+2. Compare the installed skill with Git and identify the live changes to record;
+   reconcile independently changed Git content without replacing the live source.
 3. Apply any requested improvement through `skill-creator`; skip editing when only recording existing live changes.
 4. Read back and validate the complete installed skill tree.
-5. Convert it to canonical form: omit generated `manifest.txt`, restore the canonical directory name, and restore only the `SKILL.md` frontmatter name when the projection uses an alias.
-6. Preserve repository-only files unless the live edit intentionally deleted or replaced them; resolve ambiguity before deleting anything.
+5. Convert it to canonical form:
+   * omit generated `manifest.txt`,
+   * restore the canonical directory name,
+   * and restore only the `SKILL.md` frontmatter name when the projection uses an alias.
+6. Preserve repository-only files unless the live edit intentionally deleted or replaced them;
+   resolve ambiguity before deleting anything.
 7. Recheck `main`. If it advanced, reload and reconcile rather than overwriting newer work.
 8. Create a focused branch from current `main`, commit the resulting changes, and open a pull request.
    Record the base commit and verified live snapshot in the PR so later reconciliation can distinguish concurrent edits.
@@ -98,16 +103,17 @@ Preserve or return the complete exported bundle when possible and report **ChatG
 
 1. Read current `main` and the allow-list.
 2. Resolve the requested skill or managed skill set to canonical directories.
-3. Inspect installed versions before replacing anything. Compare against a verified prior synchronization snapshot
-   when available: an unchanged older deployment is behind Git, not an independent live edit.
+3. Inspect installed versions before replacing anything.
+   Compare against a verified prior synchronization snapshot when available:
+   an unchanged older deployment is behind Git, not an independent live edit.
 4. If a live skill contains independent changes absent from Git,
    report the drift and request direction unless the user explicitly asked to discard it.
    If the origin of a difference cannot be established, do not assume it is safe to overwrite.
 5. From the checked-out source commit's `chatgpt/` directory, run `bash package.sh <output-directory>`.
    Extract the selected ZIPs and use their complete skill directories as the deployment input;
    do not reimplement packaging or apply additional name transformations.
-6. Validate, save, and verify through `skill-creator`, then compare the saved tree with the extracted package,
-   excluding generated `manifest.txt`.
+6. Validate, save, and verify through `skill-creator`,
+   then compare the saved tree with the extracted package, excluding generated `manifest.txt`.
 7. Report the exact source commit and any remaining differences.
 
 Handle multiple skills independently so one failure does not obscure the others.
@@ -118,17 +124,17 @@ For a status request, compare current `main` with the live skill after normalizi
 Report skill, Git commit, state, and material differences without reconciling or saving either side.
 A difference alone does not establish which side changed; report uncertainty when no verified baseline is available.
 
-For live-to-Git updates when both sides changed, preserve both versions and combine non-conflicting edits
-in the PR; ask which behavior should win for genuine conflicts.
-For Git-to-live updates, follow the drift safeguard above. If the user chooses to retain live changes,
-record them through the live-to-Git workflow before deploying the merged result.
+For live-to-Git updates when both sides changed, preserve both versions and combine non-conflicting edits in the PR;
+ask which behavior should win for genuine conflicts.
+For Git-to-live updates, follow the drift safeguard above.
+If the user chooses to retain live changes, record them through the live-to-Git workflow before deploying the merged result.
 Never use timestamps alone to choose a winner.
 
 ## Git consistency
 
 For live-to-Git updates, record the verified live changes after reversing documented packaging transformations;
-preserve repository-only content as described above. A deployment is synchronized only when its complete
-saved tree matches the packaged Git source, excluding generated `manifest.txt`.
+preserve repository-only content as described above.
+A deployment is synchronized only when its complete saved tree matches the packaged Git source, excluding generated `manifest.txt`.
 Do not describe an unmerged branch as already present on `main`.
 
 ## Completion
