@@ -1,6 +1,6 @@
 interface:
   display_name: Notion Watchlist Ingest
-  short_description: Save films and screenings to your Notion Watchlist
+  short_description: Save movies to Notion "Watchlist" database
   default_prompt: Use $notion-ingest-watchlist to record a film or screening in my
     Notion Watchlist.
   icon_small: assets/icon.svg
