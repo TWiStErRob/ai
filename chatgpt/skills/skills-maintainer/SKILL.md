@@ -23,10 +23,7 @@ Keep live ChatGPT skills useful immediately while preserving Git as their durabl
 If either capability is unavailable, complete the safe portion only and report exactly which side remains unsynchronized.
 Never claim that a skill was updated or recorded without reading it back from that surface.
 
-Before changing an installed ChatGPT personal skill, load and follow the current `skill-creator` skill.
-Treat its operation routing, checkout location, save procedure, and post-save verification rules as authoritative.
-Do not rediscover or duplicate those implementation details here, and do not substitute a parent directory,
-`skills.read` snapshot, or ordinary scratch copy for the installation it identifies.
+For installed-skill edits, load and follow the current `skill-creator` skill, including its save and verification workflow.
 
 ## Configured source
 
@@ -44,6 +41,7 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 
 - A request to **improve, change, fix, or update** a live skill is live-first: update ChatGPT, then record that exact result in GitHub.
 - A request to **pull, refresh, restore, or sync from main** is Git-first: read the latest `main`, then update ChatGPT.
+- A request to **sync from live to Git** records the installed version in Git without deploying Git over it first.
 - A request to **compare, inspect, or show status** is read-only.
 - If both sides changed independently, reconcile explicitly. Do not choose a winner silently.
 
@@ -55,25 +53,17 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 - Validate `SKILL.md` frontmatter and internal relative references before updating either side.
 - Preserve unrelated files and unrelated skills.
 - Apply intentional deletions on both sides; otherwise Git would not reproduce the live skill.
-- For an explicit Git-to-live sync, the mapped Git tree is authoritative for every authored file,
-  including `SKILL.md` name and description, `agents/openai.yaml`, assets, references, scripts, and deletions.
-  Do not preserve a conflicting live name, alias, icon, or instruction merely because it was already installed.
 - When a projection renames a skill, rewrite only the `SKILL.md` frontmatter `name` at the boundary.
   The live name matches the projection directory; the Git name matches the canonical source directory.
-  Determine this transformation exclusively from the current allow-list mapping; never infer it from the installed name.
 - Do not treat API-hosted skills and ChatGPT workspace skills as interchangeable resources.
 
-After saving a personal skill, wait for reconciliation, fetch the personal-skills remote, and verify its resulting tree.
-The current conversation's `skills.read` result and Skills UI may be cached and are not valid deployment read-backs.
-Reconciliation can materialize platform-managed UI metadata or icons. Compare the reconciled tree with the intended
-projection, distinguish those rewrites from the authored Git input, and never silently call a mismatch synchronized.
-If reconciliation replaces an authored file, restore it and retry once; if it is replaced again, report the exact
-remaining platform drift instead of repeatedly overwriting it.
+Compare the verified saved tree with the intended result. Report any platform rewrite as remaining drift;
+retry only when there is evidence that a changed approach can succeed.
 
 ## Live ChatGPT to Git
 
 1. Read the latest `main` commit, the allow-list, and the mapped canonical skill tree.
-2. Inspect the installed skill and establish whether it already differs from Git, if so offer to deploy first.
+2. Compare the installed skill with Git and identify the live changes to record; reconcile independently changed Git content without replacing the live source.
 3. Apply the requested improvement using the available ChatGPT skill editor.
 4. Read back and validate the complete installed skill tree.
 5. Convert it to canonical form: omit generated `manifest.txt`, restore the canonical directory name, and restore only the `SKILL.md` frontmatter name when the projection uses an alias.
@@ -117,14 +107,15 @@ Preserve or return the complete exported bundle when possible and report **ChatG
 
 1. Read current `main` and the allow-list.
 2. Resolve the requested skill or managed skill set to canonical directories.
-3. Inspect installed versions before replacement so the discarded drift can be reported, not preserved.
-   An explicit request to sync, restore, deploy, or update from Git authorizes replacing that drift with Git.
-4. Build the live projection from Git: preserve the complete tree, use the allow-list target directory name,
-   rewrite only the frontmatter name when the allow-list actually aliases it, and exclude build output and authentication material.
-5. Validate and save each projected skill through the personal-skills checkout, one skill operation at a time.
-6. Wait for reconciliation, fetch the personal-skills remote, and compare the resulting complete tree with the projection.
-   Retry an authored-file rewrite once, then report persistent platform drift precisely.
-7. Report the exact source commit and whether the reconciled installed skill matches it after documented transformations.
+3. Inspect installed versions before replacing anything.
+4. If a live skill contains changes absent from Git,
+   report the drift and request direction unless the user explicitly asked to discard it.
+5. From the checked-out source commit's `chatgpt/` directory, run `bash package.sh <output-directory>`.
+   Extract the selected ZIPs and use their complete skill directories as the deployment input;
+   do not reimplement packaging or apply additional name transformations.
+6. Validate, save, and verify through `skill-creator`, then compare the saved tree with the extracted package,
+   excluding generated `manifest.txt`.
+7. Report the exact source commit and any remaining differences.
 
 Handle multiple skills independently so one failure does not obscure the others.
 
