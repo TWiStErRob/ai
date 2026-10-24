@@ -80,6 +80,20 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 10. Fetch the resulting page after the write and verify the stored properties.
 11. Report concisely what was stored, modified and any meaningful field intentionally left blank.
 
+## Historical experiences and evidence
+
+For past activities, courses, sessions, and photo-based recollections, reconstruct the **actual visit**, not a hypothetical public listing.
+
+1. Search for existing Go-list entries by event, organiser, aliases, dates, and venue; update an existing record when new evidence concerns it.
+2. Start with the user's account and supplied messages, photos, albums or certificates. If relevant connected sources are available, corroborate via Google Calendar and email. Calendar searches should cover the suspected dates and should not rely on matching titles alone.
+3. Separate booking evidence from attendance evidence. A payment, reservation or confirmed calendar event alone does not establish `Went`; the user's explicit recollection, course completion, post-visit discussion, or dated activity photos can support it.
+4. Reconcile dates carefully: a diary date might fall within a multi-day course, while an emailed certificate might arrive weeks later. Record the best-supported `Visit` and briefly note conflicting or less precise evidence in the body.
+5. Photo album names such as `YYYYMMDD-YYYYMMDD Activity (Place) [Person]` offer potential dates and place clues. Preserve the original name and label locations derived from filenames as unverified, especially when GPS is absent.
+6. Match activities to a documented historical trip where evidence establishes the relationship. Check the year and itinerary, avoiding a different journey to the same country.
+7. Capture concise provenance in the page body (calendar event link, email date, album title, certificate), without copying unrelated private messages, personal bank details, or full correspondence.
+8. Unknown public `Availability` and `Hours` should stay blank even when a personal `Visit` is known. Use a date-only visit if time is unknown, or the supported visit range for a multi-day activity.
+9. Preserve existing factual details when updating and fetch the page after writing to verify changes.
+
 ## Property conventions
 
 ### Out of scope
@@ -155,6 +169,8 @@ Do not guess when:
 If left blank, mention useful pricing details in the final response.
 
 #### `Status`
+For historical entries, use `Went` only when the user confirms attending or there is credible participation evidence; a confirmed booking alone is insufficient.
+
 For a link the user simply asks to save, default to `Idea`.
 
 Only use another status when the user has supplied facts supporting it:
@@ -344,11 +360,15 @@ QR code as image file attachment or PDF. A link to external page showing actual 
 A public ticket-sales URL does not belong in `Tickets`.
 
 #### `Trip`
+For reconstructed history, an existing trip may be linked when records establish the same historical journey, even if the user does not re-state the relationship in this turn. Check the year.
+
 Only relate when the conversation explicitly ties the item to an existing trip.
 Do not create a new `Trip` unless explicitly asked.
 
 
 ## Quality checks before finishing
+
+For historical entries, additionally verify that attendance was distinguished from booking, the date and time were appropriately corroborated, inferred locations and sources were labelled, and the trip refers to the right journey.
 
 Confirm all of the following:
 
