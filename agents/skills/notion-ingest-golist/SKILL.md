@@ -71,14 +71,17 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - a specific planned or completed Visit, when supported
    - any relevant trip or information source
 4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Explain material uncertainty.
-5. Fetch the current Go-list schema before writing. Reuse schemas and records already read during the task; refresh only after relevant changes, conflicts, or failed verification.
+5. Fetch the current Go-list database schema before writing.
 6. Search the Go-list for likely duplicates by:
    - event name
    - canonical URL
    - supplied URL
    - obvious same-event identity
    If there's ambiguity, ask if user wants to update an existing entry instead of creating a duplicate or incorrectly updating the wrong record.
-7. Search the Places database for an appropriate existing Place relation, check for a matching Trip where relevant, and resolve useful existing Topics through the relation's target data source.
+7. Resolve relations:
+   - Search the Places database for an appropriate existing Place relation
+   - Check for a matching Trip in Holidays database where relevant,
+   - Useful existing Topics pages.
 8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
 9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
@@ -137,29 +140,20 @@ Connect the entry to existing interests or knowledge hubs when useful beyond `Ty
 Leave this relation empty when Type provides enough classification; not every event needs a Topic.
 
 - Read the relation target from the Go-list schema and reuse the current Topic catalogue.
-  Inspect relevant Topic content or subpages when needed to understand its scope; do not rely on the name alone.
 - Classify the defining activity or subject. Do not infer Topics from incidental movement, companions, venue, or organiser.
 - Add multiple Topics when each describes a substantial aspect of the entry.
   Do not automatically add broad Topics such as Health to physical activities or Spirituality to yoga.
 - Preserve existing relations and add supported matches without duplicates.
   Do not create Topics automatically; propose a genuinely useful gap and obtain approval.
-  If a suitable standalone reference page already exists, propose moving that page into Topics rather than duplicating it.
 
 Apply these distinctions using the live vocabulary:
 - `Games`: board games, quizzes, scavenger hunts, escape rooms, VR games and physical challenge games.
   Physical exertion alone does not make an activity a sport; open-ended sensory interaction alone does not make it a game.
-  Keep ordinary sporting outings under the existing Sport Type when no useful Topic applies.
 - `Comedy`: stand-up and comic improvisation, including entries typed Theatre or Festival.
-  Do not tag an entire mixed festival merely because it includes comedy.
 - `Social`: gatherings centred on conversation and companionship, such as picnics and dinners designed to meet new people.
-  Use Social for Timeleft dinners; its reference page is already under that Topic.
   Dedicated game or sport sessions do not acquire Social merely because people attend together.
 - `Dating`: explicit dating events and dating-related talks; do not infer it for every outing with a date.
 - `Travel`: trips and destination exploration; do not propagate it to every attraction or restaurant within a trip.
-- `Aquatic Bodywork`: supported bodywork sessions; do not extend it to baths, spas or flotation solely because water is involved.
-
-For bulk triage, show each proposed entry's existing and resulting Topics for review before applying,
-unless the user has already authorised the specific batch.
 
 #### `URL`
 The Notion property may appear through tools as `userDefined:URL`.
@@ -403,7 +397,6 @@ Confirm all of the following:
 - No new Place was created without explicit user approval.
 - No new select options were invented.
 - Read-only/formula fields were not written.
-- Topics add useful connections beyond Type, preserve existing links, and use approved existing records.
 - `URL` is canonical/official when available.
 - Secondary discovery source was preserved in `Inspired by` when feasible.
 - The final page was fetched after writing and the stored properties were verified.
