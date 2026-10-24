@@ -53,9 +53,9 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 
 1. Identify the exact item from the supplied link, description, or evidence, and inspect relevant sources.
 2. Research or corroborate beyond the supplied material when useful.
-   - Prefer primary sources: official organiser, official event site, official venue, official ticket page; for personal bookings or attendance, use the user's account and relevant connected Calendar, email, receipts or certificates.
+   - Prefer primary sources: official organiser, official event site, official venue, official ticket page
+   - For past events: use the user's relevant connected calendar, e-mail, messages, location history, tickets, receipts, statements.
    - Treat Secret London, Time Out, social posts, blogs, aggregators, newsletters, etc. as discovery sources.
-   - Distinguish booking from attendance: a payment, ticket or calendar entry alone does not prove the user went. Completion records, post-event messages, dated photos, or the user's account can corroborate participation.
 3. Establish the best-supported facts:
    - official name
    - event/run dates
@@ -68,19 +68,18 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - official trailer/promo video if clearly relevant
    - whether the item is singular or repeatable
    - a specific planned or completed Visit, when supported
-   - any relevant trip and concise source provenance
+   - any relevant trip or information source
 4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Explain material uncertainty.
 5. Fetch the current Go-list schema before writing.
 6. Search the Go-list for likely duplicates by:
    - event name
    - canonical URL
    - supplied URL
-   - aliases, organiser, venue, date, and obvious same-event identity
-   Update an existing entry when the evidence refers to the same experience.
-   If there's ambiguity, ask if user wants to update an existing entry instead of creating a duplicate.
-7. Search Places for an appropriate existing Place relation, and check for a matching Trip where relevant.
-8. Map only supported facts. Preserve useful links, dates and source filenames concisely in the page body, distinguishing verified, remembered and inferred details. A photo album name may suggest a date or place but cannot verify an exact venue without other evidence.
-9. Create or update the page while preserving unrelated existing details.
+   - obvious same-event identity
+   If there's ambiguity, ask if user wants to update an existing entry instead of creating a duplicate or incorrectly updating the wrong record.
+7. Search the Places database for an appropriate existing Place relation, and check for a matching Trip where relevant.
+8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
+9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
 11. Report concisely what was stored, modified and any meaningful field intentionally left blank.
 
@@ -168,7 +167,9 @@ Only use another status when the user has supplied facts supporting it:
 - `Could not go`
 - `Dismissed`
 
-Do not infer planning status from event dates. Use `Went` when the user reports attending or participation evidence supports it, not merely because a booking was made.
+Do not infer planning status from event dates.
+Use `Went` when the user reports participation,
+not merely because a booking was made (`Planned`).
 
 If users asks for Google Calendar event too, set it to Planning, and mark calendar event as Tentative.
 
@@ -209,18 +210,20 @@ Use detailed, practical location text:
 Example style:
 `Westminster Cathedral, Victoria Street, Victoria, London SW1P 1LT`
 
-This field is deliberately more specific than `Place`. Label locations inferred only from a photo filename, message or recollection; do not imply GPS verification.
+This field is deliberately more specific than `Place`.
+Do not label information source in this field, only physical location is relevant.
 
 ### When?
 - `Availability` is when it is possible to visit.
 - `Hours` breaks down what times during the `Availability` window it's possible to go.
 - `Length` describes what's the expected time spent at the venue
-- `Visit` records a specific personal plan or attendance, not public event availability.
+- `Visit` records a specific personal attendance, not public event availability.
 - Prefer date-only `Availability` plus `Hours` for normal event schedules.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
-This is the **event/experience availability window**, not the user's personal visit. Leave it blank if only the personal date is known.
+This is the **event/experience availability window**, not the user's personal visit.
+Clarify with user if it's unclear whether it was a single event based on their visit.
 For exhibitions/plays research when the opening night was and backdate if necessary.
 
 Examples:
@@ -238,7 +241,8 @@ Date/time rules
 - Avoid UTC conversion mistakes that shift the calendar date.
 
 #### `Hours`
-Human-readable public opening/event/session hours. Do not extrapolate public hours from a personal booking.
+Human-readable public opening/event/session hours.
+Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events put the starting time only, `Length` implies end time.
 Include last entry if known at the end: `... Last entry 1 hour before closing.`
@@ -276,7 +280,8 @@ Only set when the user explicitly says:
 - they booked a specific performance/session,
 - or when they actually went.
 
-Use a specific visit/performance datetime range when known; otherwise use date-only. Corroborate via relevant connected sources when available, especially on request. For a multi-day course use the supported range, not a later certificate date. Preserve local timezone.
+Use a specific visit/performance datetime range when known; otherwise use date-only.
+Corroborate via relevant connected sources when available, especially on request.
 
 **Never copy `Availability` into `Visit` just because the event occurs on one day.**
 
@@ -348,7 +353,8 @@ QR code as image file attachment or PDF. A link to external page showing actual 
 A public ticket-sales URL does not belong in `Tickets`.
 
 #### `Trip`
-Only relate when the conversation or reliable records link the experience to an existing trip. Verify the year and itinerary so another journey to the same place is not confused with it.
+Only relate when the conversation or reliable records link the experience to an existing trip.
+Verify the dates and itinerary, so another journey to the same place is not confused with it.
 Do not create a new `Trip` unless explicitly asked.
 
 
@@ -357,18 +363,17 @@ Do not create a new `Trip` unless explicitly asked.
 Confirm all of the following:
 
 - Relevant supplied links, descriptions and evidence were inspected.
-- Suitable public or personal sources were checked where useful; booking was not confused with participation.
+- Suitable public or personal sources were checked where useful.
 - A duplicate search was performed.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known.
-- `Location` is as precise as the evidence permits while `Place` uses an existing broader relation; inferred details are marked.
+- `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
 - No new Place was created without explicit user approval.
 - No new select options were invented.
 - Read-only/formula fields were not written.
 - `URL` is canonical/official when available.
 - Secondary discovery source was preserved in `Inspired by` when feasible.
-- Any Trip relation matches the correct journey, and provenance is concise without unrelated private information.
 - The final page was fetched after writing and the stored properties were verified.
 - After any unintended write, overwrite, update or partially incorrect creation, STOP IMMEDIATELY, and avoid any further destructive mutations and tell the user exactly what changed.
 
