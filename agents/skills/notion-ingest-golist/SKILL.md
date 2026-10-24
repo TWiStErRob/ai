@@ -217,13 +217,14 @@ Do not label information source in this field, only physical location is relevan
 - `Availability` is when it is possible to visit.
 - `Hours` breaks down what times during the `Availability` window it's possible to go.
 - `Length` describes what's the expected time spent at the venue
-- `Visit` records a specific personal attendance, not public event availability.
+- `Visit` records a specific planned or actual attendance, not public event availability.
 - Prefer date-only `Availability` plus `Hours` for normal event schedules.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
 This is the **event/experience availability window**, not the user's personal visit.
-Clarify with user if it's unclear whether it was a single event based on their visit.
+Don't assume an experience was available only on the user's visit date.
+Research its availability separately; leave it blank if unknown.
 For exhibitions/plays research when the opening night was and backdate if necessary.
 
 Examples:
