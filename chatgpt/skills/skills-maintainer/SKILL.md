@@ -49,7 +49,8 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 - Treat the installed ChatGPT skill as the live deployment and Git as the durable, rebuildable record.
 - Preserve the complete skill directory, including instructions, references, scripts, assets, and `agents/openai.yaml`.
 - Never commit credentials, tokens, generated authentication state, downloaded archives, or ChatGPT-generated `manifest.txt` files.
-- Treat conversation history, connected records, and user-specific examples as private unless the user explicitly intends to publish them. Publish only information necessary to reproduce the skill; replace incidental names, addresses, contact details, and sensitive examples with generic wording.
+- Treat conversation history, connected records, and user-specific examples as private unless the user explicitly intends to publish them.
+- Publish only information necessary to reproduce the skill; replace incidental names, addresses, contact details, and sensitive examples with generic wording.
 - Validate `SKILL.md` frontmatter and internal relative references before updating either side.
 - Preserve unrelated files and unrelated skills.
 - Apply intentional deletions on both sides; otherwise Git would not reproduce the live skill.
@@ -74,13 +75,14 @@ retry only when there is evidence that a changed approach can succeed.
 6. Preserve repository-only files unless the live edit intentionally deleted or replaced them;
    resolve ambiguity before deleting anything.
 7. Recheck `main`. If it advanced, reload and reconcile rather than overwriting newer work.
-8. Review the exact GitHub-bound content, including files, branch name, commit message, PR title, and PR body. Keep personal context and private source records out of explanatory examples. Record synchronization details without reproducing private skill contents unnecessarily.
+8. Review the exact GitHub-bound content, including files, branch name, commit message, PR title, and PR body. Keep personal context and private source records out of explanatory examples.
 9. Create a focused branch from current `main`, commit the resulting changes, and open a pull request.
    Record the base commit and verified live snapshot in the PR so later reconciliation can distinguish concurrent edits.
 10. Immediately tell the user the PR is ready for review and provide its link.
    This is a progress update, not completion.
 
-If a write encounters a privacy or security block, do not route around it. Review and minimize the intended disclosure, and proceed only through an allowed path with any required approval.
+If a write encounters a privacy or security block, do not route around it.
+Review and minimize the intended disclosure, and proceed only through an allowed path with any required approval.
 
 Always use a pull request for ChatGPT-originated changes; never push them directly to `main`.
 Reuse an open synchronization PR only when it represents the same live-to-Git stream.
