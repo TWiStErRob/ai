@@ -53,7 +53,6 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 ## Workflow
 
 1. Identify the exact item from the supplied link, description, or evidence, and inspect relevant sources.
-   For Instagram links, load and follow `read-instagram` to inspect the post, caption and relevant slides before requesting screenshots. If that skill is unavailable, report the missing dependency rather than claiming Instagram itself is inaccessible.
 2. Research or corroborate beyond the supplied material when useful.
    - Prefer primary sources: official organiser, official event site, official venue, official ticket page
    - For past events: use the user's relevant connected calendar, e-mail, messages, location history, tickets, receipts, statements.
