@@ -75,8 +75,9 @@ retry only when there is evidence that a changed approach can succeed.
 6. Preserve repository-only files unless the live edit intentionally deleted or replaced them;
    resolve ambiguity before deleting anything.
 7. Recheck `main`. If it advanced, reload and reconcile rather than overwriting newer work.
-8. Review the exact GitHub-bound content, including files, branch name, commit message, PR title, and PR body. Keep personal context and private source records out of explanatory examples.
-9. Create a focused branch from current `main`, commit the resulting changes, and open a pull request.
+8. Review the exact GitHub-bound content yourself, including files, branch name, commit message, PR title, and PR body. Keep personal context and private source records out of explanatory examples; do not turn this review into an additional user approval step for the authorized workflow.
+9. Treat a request to update or record a managed skill, or open a PR for it, as authorization to create a focused branch from current `main` in the configured GitHub repository, commit and push the scoped skill changes to that branch, and create the pull request without additional confirmation. For requested review changes, update the same PR branch and its title and description as needed without asking again.
+   This authorization does not include merging or closing PRs, deleting branches, force-pushing, changing repository settings or permissions, or unrelated writes; ask before those actions unless explicitly authorized. It does not override platform permissions or automatic approval checks.
    Record the base commit and verified live snapshot in the PR so later reconciliation can distinguish concurrent edits.
 10. Immediately tell the user the PR is ready for review and provide its link.
    This is a progress update, not completion.
