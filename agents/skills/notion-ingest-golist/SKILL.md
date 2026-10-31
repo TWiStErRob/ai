@@ -53,6 +53,9 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 ## Workflow
 
 1. Identify the exact item from the supplied link, description, or evidence, and inspect relevant sources.
+   - For Instagram, try web retrieval and a focused search first. A retrieval error such as `DisabledError` describes that tool's failure, not proof that the post is inaccessible through every available route.
+   - When a successful search does not expose the necessary post content and browser use is permitted, open the supplied post in the available browser. Follow its current instructions, dismiss cookie or sign-up prompts when possible without signing in, and inspect the caption and relevant carousel slides, including any requested `img_index`. Read poster text visually when it is absent from the accessibility tree.
+   - Do not ask the user for screenshots before checking the permitted retrieval routes. If access remains blocked, report the specific observed blocker and the routes actually tried; only then request the minimum missing evidence. Do not claim that Instagram is generally inaccessible, bypass access controls, or treat a search/retrieval tool error as authorization to use a restricted browser route.
 2. Research or corroborate beyond the supplied material when useful.
    - Prefer primary sources: official organiser, official event site, official venue, official ticket page
    - For past events: use the user's relevant connected calendar, e-mail, messages, location history, tickets, receipts, statements.
