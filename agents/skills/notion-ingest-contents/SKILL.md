@@ -79,6 +79,7 @@ Treat variants as equivalent for duplicate detection, but store the submitted UR
 Fetch source metadata in as few batched web requests as practical. Finish title/date/type/topic/author resolution for the full input set before issuing any Notion write. Read-only work should not be interleaved with several incremental create calls.
 
 When possible, fetch metadata in one batched web request.
+For Instagram links, load and follow `read-instagram` to inspect the source before requesting screenshots. If that skill is unavailable, report the missing dependency rather than claiming Instagram itself is inaccessible.
 
 Open all source URLs together. For each page, determine:
 

@@ -8,6 +8,9 @@ The source skill contents are preserved as-is except when a link renames a skill
 then the packaged `SKILL.md` frontmatter name is changed to match its exported directory.
 Exported `manifest.txt` is neither tracked nor generated.
 
+The three Notion ingest skills use the shared `read-instagram` skill for Instagram sources.
+Install its standalone package alongside the ingest skills; their ZIPs do not bundle sibling skills.
+
 ## Deployment
 
 ### Current
