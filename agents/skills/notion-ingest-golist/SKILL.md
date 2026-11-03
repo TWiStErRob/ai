@@ -68,6 +68,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - canonical official URL
    - official trailer/promo video if clearly relevant
    - whether the item is singular or repeatable
+   - materially different missions, formats, routes, or session variants
    - a specific planned or completed Visit, when supported
    - any relevant trip or information source
 4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Explain material uncertainty.
@@ -251,6 +252,8 @@ Don't assume an experience was available only on the user's visit date.
 Research its availability separately; leave it blank if unknown.
 For exhibitions/plays research when the opening night was and backdate if necessary.
 
+For an indefinite or rolling-horizon attraction, store a date range from the best-supported opening, relaunch, or current-stint announcement date through the last date currently bookable. Treat the end as the **published booking horizon**, not a claimed closing date. This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates. Prefer a distinct current-stint start when the attraction has clearly relaunched, otherwise use the original opening date.
+
 Examples:
 - a one-day festival → that event date
 - a theatre production → first-to-last run dates
@@ -270,6 +273,7 @@ Human-readable public opening/event/session hours.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events put the starting time only, `Length` implies end time.
+Do not settle for `times vary by date` when the live booking flow exposes exact starts. Inspect representative future dates for every operating weekday, preferring dates far enough ahead that sold-out sessions are less likely to be hidden. Record the recurring 24-hour start-time pattern by weekday. If the pattern genuinely changes across the booking period, record the date-specific pattern and exceptions needed to plan without reopening the booking site. Prefer mission/session start times from the live booking calendar over generic venue opening hours, and state when sold-out starts may be hidden.
 Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
@@ -282,6 +286,10 @@ Follow the style already present in the database, for example:
 - `same as venue (...)` for hosted exhibitions, e.g. in Kew Gardens
 
 Include relevant exceptions.
+
+### Page content
+
+Use the page body for supported, decision-relevant detail that does not fit the database properties. Keep it concise and structured. For repeatable experiences, list the materially different missions, games, routes, or session variants, explain their distinctions when supported, and include booking notes needed to choose among them. Record booking-horizon context here when an `Availability` end is not an announced closing date.
 
 #### `Length`
 The normal duration of one visit, performance, session, route, or experience.
@@ -393,6 +401,9 @@ Confirm all of the following:
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known.
+- Exact bookable starts were researched across representative dates rather than replaced with a vague `varies by date` summary.
+- Rolling availability uses the current booking-horizon end and records that it is not necessarily a closing date.
+- Materially different missions or variants are captured in the page body when properties cannot represent them.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
 - No new Place was created without explicit user approval.
 - No new select options were invented.
