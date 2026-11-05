@@ -18,7 +18,7 @@ Keep live ChatGPT skills useful immediately while preserving Git as their durabl
 ## Required capabilities
 
 - Read/write access to the configured GitHub repository.
-- The ability to inspect and edit skills in the current ChatGPT workspace.
+- For deployment work, the ability to inspect and edit skills in the current ChatGPT workspace. A PR-only change requires GitHub access, not an installed-skill write.
 
 If either capability is unavailable, complete the safe portion only and report exactly which side remains unsynchronized.
 Never claim that a skill was updated or recorded without reading it back from that surface.
@@ -39,7 +39,8 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 
 ## Choose the direction
 
-- A request to **improve, change, fix, or update** a live skill is live-first: update ChatGPT, then record that exact result in GitHub.
+- A request to **create/open a PR**, or make changes **through/in a PR**, is PR-only unless the user also explicitly requests deployment. This takes precedence over general words such as improve, change, fix or update: prepare the changes on a repository branch without editing, saving or pushing the installed ChatGPT skill.
+- A request to **improve, change, fix, or update** a live skill without a PR-only instruction is live-first: update ChatGPT, then record that exact result in GitHub.
 - A request to **pull, refresh, restore, or sync from main** is Git-first: read the latest `main`, then update ChatGPT.
 - A request to **compare, inspect, or show status** is read-only.
 - Requested **PR review changes** update that PR branch; deploy them after merge unless the user asks otherwise.
@@ -53,7 +54,7 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 - Publish only information necessary to reproduce the skill; replace incidental names, addresses, contact details, and sensitive examples with generic wording.
 - Validate `SKILL.md` frontmatter and internal relative references before updating either side.
 - Preserve unrelated files and unrelated skills.
-- Apply intentional deletions on both sides; otherwise Git would not reproduce the live skill.
+- For authorized synchronization, apply intentional deletions on both sides; otherwise Git would not reproduce the live skill. A PR-only change must leave the installed tree untouched.
 - When a projection renames a skill, rewrite only the `SKILL.md` frontmatter `name` at the boundary.
   The live name matches the projection directory; the Git name matches the canonical source directory.
 - Do not treat API-hosted skills and ChatGPT workspace skills as interchangeable resources.
@@ -62,6 +63,8 @@ Compare the verified saved tree with the intended result. Report any platform re
 retry only when there is evidence that a changed approach can succeed.
 
 ## Live ChatGPT to Git
+
+For PR-only requests, use the same repository review and PR steps below, but prepare and validate the proposed changes in the repository branch instead of applying steps 3–5 to the installed skill; the proposed repository tree is already in canonical form. Read the installed version only when useful for comparison; do not edit it, create an installed-skill commit, or attempt deployment as part of validation. Preserve unrelated differences without folding them into the PR. Record the repository base and proposed revision rather than claiming a verified deployment snapshot.
 
 1. Read the latest `main` commit, the allow-list, and the mapped canonical skill tree.
 2. Compare the installed skill with Git and identify the live changes to record;
@@ -79,7 +82,7 @@ retry only when there is evidence that a changed approach can succeed.
 9. Create a focused branch from current `main`, commit the resulting changes, and open a pull request.
    Record the base commit and verified live snapshot in the PR so later reconciliation can distinguish concurrent edits.
 10. Immediately tell the user the PR is ready for review and provide its link.
-   This is a progress update, not completion.
+   For a PR-only request, check CI and merge state, report **Awaiting merge — not deployed**, and complete the request. Do not wait for merge or deploy unless the user requested that follow-up. For a deployment-inclusive workflow, continue below.
 
 If a write encounters a privacy or security block, do not route around it.
 Review and minimize the intended disclosure, and proceed only through an allowed path with any required approval.
@@ -94,7 +97,7 @@ Use a persistent wait mechanism when available; otherwise report **Awaiting merg
 Do not imply that monitoring continues after the turn without such a mechanism.
 
 - If closed without merge, preserve the live version and report any live changes still absent from `main`.
-- If merged, fetch the then-latest `main`, not merely the PR's final commit.
+- If merged, fetch the then-latest `main`, not merely the PR's final commit. Merge alone does not authorize deployment after a PR-only request; continue into deployment steps only when deployment was also requested.
 - Compare every allow-listed skill between the recorded PR base and current `main`.
 - Deploy affected skills through **Latest main to live ChatGPT**, including review edits and merge resolutions.
   Use the recorded live snapshot to distinguish the PR's superseded content from new live edits;
@@ -158,4 +161,4 @@ Report each affected skill with one of these states:
 If comparison or verification is incomplete, report that limitation instead of asserting one of these states.
 
 Include the Git commit or pull-request link when one exists
-and state whether a new ChatGPT conversation or reload is needed for an updated maintainer skill to take effect.
+and state whether a new ChatGPT conversation or reload is needed for a deployed maintainer update to take effect. For PR-only changes, state that the installed skill was not changed; do not imply a reload will apply the unmerged proposal.
