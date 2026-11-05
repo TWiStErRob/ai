@@ -43,7 +43,7 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 - A request to **improve, change, fix, or update** a live skill without a PR-only instruction is live-first: update ChatGPT, then record that exact result in GitHub.
 - A request to **pull, refresh, restore, or sync from main** is Git-first: read the latest `main`, then update ChatGPT.
 - A request to **compare, inspect, or show status** is read-only.
-- Requested **PR review changes** update that PR branch; deploy them after merge unless the user asks otherwise.
+- Requested **PR review changes** update that PR branch. Deploy after merge only when deployment is within the user's authorized scope.
 
 ## Invariants
 
@@ -67,8 +67,8 @@ retry only when there is evidence that a changed approach can succeed.
 For PR-only requests, use the same repository review and PR steps below, but prepare and validate the proposed changes in the repository branch instead of applying steps 3–5 to the installed skill; the proposed repository tree is already in canonical form. Read the installed version only when useful for comparison; do not edit it, create an installed-skill commit, or attempt deployment as part of validation. Preserve unrelated differences without folding them into the PR. Record the repository base and proposed revision rather than claiming a verified deployment snapshot.
 
 1. Read the latest `main` commit, the allow-list, and the mapped canonical skill tree.
-2. Compare the installed skill with Git and identify the live changes to record;
-   reconcile independently changed Git content without replacing the live source.
+2. For live-first work, compare the installed skill with Git and identify the live changes to record;
+   reconcile independently changed Git content without replacing the live source. For PR-only work, compare the repository base and requested proposal; inspect installed differences only if relevant.
 3. Apply any requested improvement through `skill-creator`; skip editing when only recording existing live changes.
 4. Read back and validate the complete installed skill tree.
 5. Convert it to canonical form:
@@ -80,7 +80,7 @@ For PR-only requests, use the same repository review and PR steps below, but pre
 7. Recheck `main`. If it advanced, reload and reconcile rather than overwriting newer work.
 8. Review the exact GitHub-bound content, including files, branch name, commit message, PR title, and PR body. Keep personal context and private source records out of explanatory examples.
 9. Create a focused branch from current `main`, commit the resulting changes, and open a pull request.
-   Record the base commit and verified live snapshot in the PR so later reconciliation can distinguish concurrent edits.
+   Record the base commit and, for live-first work, the verified live snapshot in the PR so later reconciliation can distinguish concurrent edits. For PR-only work, record the proposed revision and state that it is not deployed.
 10. Immediately tell the user the PR is ready for review and provide its link.
    For a PR-only request, check CI and merge state, report **Awaiting merge — not deployed**, and complete the request. Do not wait for merge or deploy unless the user requested that follow-up. For a deployment-inclusive workflow, continue below.
 
