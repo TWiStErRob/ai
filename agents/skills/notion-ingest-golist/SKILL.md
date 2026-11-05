@@ -49,6 +49,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 - Tickets
 - Trailer
 - Map / Guide
+- Previous / Next / Related
 
 ## Workflow
 
@@ -82,6 +83,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - Search the Places database for an appropriate existing Place relation
    - Check for a matching Trip in Holidays database where relevant,
    - Useful existing Topics pages.
+   - Search for earlier/later editions and meaningfully related experiences. Fetch candidate pages to confirm their identity and current relations before linking; distinguish editions of one series from separate seasonal or similarly named events.
 8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
 9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
@@ -96,9 +98,6 @@ Do not invent values for:
 - `Agenda`
 - `Agenda Items`
 - `Schedule`
-- `Previous`
-- `Next`
-- `Related`
 
 Only set them when the conversation or existing database structure makes the relationship explicit.
 
@@ -327,6 +326,21 @@ If ambiguous, assume NO, and call out it end report.
 
 ### Metadata
 
+#### `Previous` / `Next`
+Use these directional relations for successive editions of the same event or experience series.
+
+- Link each edition to the nearest confirmed existing earlier/later edition, in chronological order. Set the reciprocal relation too: A.Next = B and B.Previous = A. Inspect whether Notion maintains the reciprocal side automatically before writing it again.
+- Keep different seasonal programmes or formats in separate chains, even at the same venue or with the same organiser. A shared theme or perceived spiritual succession alone does not establish series continuity; use `Related` instead. Follow an explicit user choice to group them differently.
+- Do not fabricate missing editions or create placeholders for cancelled or unannounced editions merely to complete a chain. Research and create an absent historical edition only within the user's requested scope; do not copy another edition's dates, hours, or attendance.
+- Preserve unrelated links. When inserting an edition into an existing chain, replace only the superseded adjacency so the sequence stays consistent.
+
+#### `Related`
+Use this non-directional relation for a meaningful connection between distinct experiences, including separate seasonal series or a thematic successor whose continuity is unconfirmed.
+
+- Link the relevant entries across series without merging their `Previous`/`Next` chains. Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
+- Preserve existing unrelated relations, avoid duplicates and self-links, and verify both sides of the connection, allowing for Notion's reciprocal updates.
+- When correcting edition links stored in `Related`, establish and verify the appropriate `Previous`/`Next` links first, then remove only the migrated links from `Related`. Retain genuine cross-series connections there.
+
 #### `Idea of`
 Who proposed to go, it could be someone who doesn't necessarily attend in the end: like a friend can suggest that the user goes.
 Do not treat `Idea of` as `Attendees`.
@@ -390,6 +404,7 @@ Confirm all of the following:
 - Relevant supplied links, descriptions and evidence were inspected.
 - Suitable public or personal sources were checked where useful.
 - A duplicate search was performed.
+- Edition identity, chronological adjacency and reciprocal `Previous`/`Next` links were verified; distinct series use `Related`, and unrelated relations were preserved.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known.
