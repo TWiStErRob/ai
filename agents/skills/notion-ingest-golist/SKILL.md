@@ -71,7 +71,8 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - materially different missions, formats, routes, or session variants
    - a specific planned or completed Visit, when supported
    - any relevant trip or information source
-4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Explain material uncertainty.
+4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Check dated announcements and live booking availability when published schedules conflict or restrictions materially affect planning, such as no after-work admission. Distinguish current facts from historical reports; do not infer when or why hours changed without evidence. Explain only material uncertainty.
+   When investigating reviews or complaints, look for evidence about the specific issue raised. Do not substitute unrelated criticism or treat an unsuccessful search as proof that no complaints exist.
 5. Fetch the current Go-list database schema before writing.
 6. Search the Go-list for likely duplicates by:
    - event name
@@ -273,7 +274,11 @@ Human-readable public opening/event/session hours.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events put the starting time only, `Length` implies end time.
-Do not settle for `times vary by date` when the live booking flow exposes exact starts. Inspect representative future dates for every operating weekday, preferring dates far enough ahead that sold-out sessions are less likely to be hidden. Record the recurring 24-hour start-time pattern by weekday. If the pattern genuinely changes across the booking period, record the date-specific pattern and exceptions needed to plan without reopening the booking site. Prefer mission/session start times from the live booking calendar over generic venue opening hours, and state when sold-out starts may be hidden.
+Research exact starts in the live booking flow across representative future dates for every operating weekday; prefer dates far enough ahead to reduce sold-out gaps. Do not settle for `times vary by date` when a useful pattern can be established. Keep the stored schedule compact:
+- For frequent exhibition/attraction admissions, use first–last entry ranges and the verified interval, rather than listing every slot. Preserve material gaps or exceptions without implying continuous availability.
+- For performances and distinct missions/sessions, list exact starts by weekday or format.
+- Put materially different date periods on separate lines: `Date range: hours`. Group identical weekdays and summarize holiday exceptions; do not copy the entire booking calendar into the page.
+Label entry-slot ranges as admission times. A final bookable slot is the last available admission observed, not proof of closing time or permission to stay for the usual duration after it. Do not infer published opening/closing hours from the slot list; identify sold-out gaps as uncertain when relevant.
 Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
@@ -286,10 +291,6 @@ Follow the style already present in the database, for example:
 - `same as venue (...)` for hosted exhibitions, e.g. in Kew Gardens
 
 Include relevant exceptions.
-
-### Page content
-
-Use the page body for supported, decision-relevant detail that does not fit the database properties. Keep it concise and structured. For repeatable experiences, list the materially different missions, games, routes, or session variants, explain their distinctions when supported, and include booking notes needed to choose among them. Record booking-horizon context here when an `Availability` end is not an announced closing date.
 
 #### `Length`
 The normal duration of one visit, performance, session, route, or experience.
@@ -331,6 +332,13 @@ Use `NO` when:
 - it is a singular event/edition, even if that event spans multiple days
 
 If ambiguous, assume NO, and call out it end report.
+
+
+### Page content
+
+Research thoroughly, but store a concise description: a short overview and only practical details that affect choosing or booking the experience. Put structured facts in their properties; do not repeat dates, hours, duration, location or base price in the body. Avoid research logs, exhaustive price examples, routine caveats and duplicated source lists. Keep a booking link or brief source note only when useful beyond `URL`.
+
+For repeatable experiences, briefly describe materially different missions, games, routes or session variants and the booking notes needed to choose among them. Include useful optional add-ons and their costs without copying every bundle. If `Availability` ends at a booking horizon rather than a confirmed closing date, record that distinction in one short note.
 
 
 ### Metadata
@@ -401,7 +409,9 @@ Confirm all of the following:
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known.
-- Exact bookable starts were researched across representative dates rather than replaced with a vague `varies by date` summary.
+- Exact bookable starts were researched across representative dates and summarized compactly without losing material gaps or exceptions.
+- Admission times and closing times are distinguished; surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
+- Structured facts stay in properties; the description contains useful additional detail rather than a research transcript.
 - Rolling availability uses the current booking-horizon end and records that it is not necessarily a closing date.
 - Materially different missions or variants are captured in the page body when properties cannot represent them.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
@@ -417,14 +427,8 @@ Confirm all of the following:
 
 Keep the completion response concise.
 
-State:
-- whether an entry was created or updated,
-- a table of all the fields
-  - their values and potential remarks
-  - show original value when entry was updated
-  - show new value when entry was updated or created
-  - any important field left blank because the source was ambiguous or the connector could not safely represent it.
+Link the entry, state whether it was created or updated, and summarize only key facts or changes and material uncertainties. Use a small table when comparison helps; show old/new values only for relevant changed fields. Do not dump every property, routine blank fields or verification steps unless the user requests a full audit.
 
 Do not claim a property was stored unless the post-write fetch confirms it.
 
-Propose any improvements to this skill based on learnings from the conversation/research conducted.
+Discuss skill improvements when requested or when a concrete recurring problem warrants a brief suggestion; do not append routine process commentary to every save.
