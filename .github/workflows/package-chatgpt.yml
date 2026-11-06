@@ -22,7 +22,7 @@ jobs:
       # Read is enough for CI callers.
       # A release caller grants contents:write for release upload.
       contents: write
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     defaults: 
       run:
         shell: bash

@@ -10,7 +10,7 @@ description: |
 
 # Notion Go-list Ingest
 
-Use this skill when the user gives a link and asks to add an event, experience, attraction, show, festival, exhibition, walk, trip idea, or similar item to their **Go-list**.
+Use this skill when the user asks to add or update an event, experience, attraction, show, festival, exhibition, walk, trip idea, or similar item in their **Go-list**, using a link, description, messages, photos, or other evidence.
 
 The goal is not merely to save the link. Research the item properly, map all supported details to the existing Go-list schema, avoid duplicates, preserve the user's existing conventions, and verify the result.
 
@@ -35,6 +35,7 @@ These identifiers are stable hints, but always fetch the database before writing
 Create (or update) a new page in the Go-list database, filling in all relevant properties:
 - URL
 - Type
+- Topics
 - Length
 - Price
 - Availability
@@ -48,14 +49,17 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 - Tickets
 - Trailer
 - Map / Guide
+- Previous / Next
+- Related
 
 ## Workflow
 
-1. Open the supplied link and identify the exact item.
-2. Research beyond the supplied page when useful.
-   - Prefer primary sources: official organiser, official event site, official venue, official ticket page.
+1. Identify the exact item from the supplied link, description, or evidence, and inspect relevant sources.
+2. Research or corroborate beyond the supplied material when useful.
+   - Prefer primary sources: official organiser, official event site, official venue, official ticket page
+   - For past events: use the user's relevant connected calendar, e-mail, messages, location history, tickets, receipts, statements.
    - Treat Secret London, Time Out, social posts, blogs, aggregators, newsletters, etc. as discovery sources.
-3. Establish the best current facts:
+3. Establish the best-supported facts:
    - official name
    - event/run dates
    - opening/event/session hours
@@ -66,17 +70,23 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - canonical official URL
    - official trailer/promo video if clearly relevant
    - whether the item is singular or repeatable
-4. If the supplied source and official source disagree, prefer the current official source and mention the discrepancy in the final response.
-5. Fetch the current Go-list schema before writing.
+   - a specific planned or completed Visit, when supported
+   - any relevant trip or information source
+4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Explain material uncertainty.
+5. Fetch the current Go-list database schema before writing.
 6. Search the Go-list for likely duplicates by:
    - event name
    - canonical URL
    - supplied URL
    - obvious same-event identity
-   If there's ambiguity, ask if user wants to update an existing entry instead of creating a duplicate.
-7. Search the Places database for an appropriate existing Place relation.
+   If there's ambiguity, ask if user wants to update an existing entry instead of creating a duplicate or incorrectly updating the wrong record.
+7. Resolve relations:
+   - Search the Places database for an appropriate existing Place relation
+   - Check for a matching Trip in Holidays database where relevant,
+   - Useful existing Topics pages.
+   - Search for earlier/later editions and meaningfully related experiences.
 8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
-9. Create or update the Go-list page.
+9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
 11. Report concisely what was stored, modified and any meaningful field intentionally left blank.
 
@@ -89,9 +99,6 @@ Do not invent values for:
 - `Agenda`
 - `Agenda Items`
 - `Schedule`
-- `Previous`
-- `Next`
-- `Related`
 
 Only set them when the conversation or existing database structure makes the relationship explicit.
 
@@ -127,6 +134,26 @@ Examples seen in the database include: Festival, Theatre, Exhibition, Light show
 The live schema is authoritative.
 
 Never create a new Type option as part of this workflow. If none is a reasonable fit, leave `Type` empty and say so.
+
+#### `Topics`
+Connect the entry to existing interests or knowledge hubs when useful beyond `Type`.
+Leave this relation empty when Type provides enough classification; not every event needs a Topic.
+
+- Read the relation target from the Go-list schema and reuse the current Topic catalogue.
+- Classify the defining activity or subject. Do not infer Topics from incidental movement, companions, venue, or organiser.
+- Add multiple Topics when each describes a substantial aspect of the entry.
+  Do not automatically add broad Topics such as Health to physical activities or Spirituality to yoga.
+- Preserve existing relations and add supported matches without duplicates.
+  Do not create Topics automatically; propose a genuinely useful gap and obtain approval.
+
+Apply these distinctions using the live vocabulary:
+- `Games`: board games, quizzes, scavenger hunts, escape rooms, VR games and physical challenge games.
+  Physical exertion alone does not make an activity a sport; open-ended sensory interaction alone does not make it a game.
+- `Comedy`: stand-up and comic improvisation, including entries typed Theatre or Festival.
+- `Social`: gatherings centred on conversation and companionship, such as picnics and dinners designed to meet new people.
+  Dedicated game or sport sessions do not acquire Social merely because people attend together.
+- `Dating`: explicit dating events and dating-related talks; do not infer it for every outing with a date.
+- `Travel`: trips and destination exploration; do not propagate it to every attraction or restaurant within a trip.
 
 #### `URL`
 The Notion property may appear through tools as `userDefined:URL`.
@@ -164,7 +191,9 @@ Only use another status when the user has supplied facts supporting it:
 - `Could not go`
 - `Dismissed`
 
-Do not infer planning status from the existence of event dates.
+Do not infer planning status from event dates.
+Use `Went` when the user reports participation,
+not merely because a booking was made (`Planned`).
 
 If users asks for Google Calendar event too, set it to Planning, and mark calendar event as Tentative.
 
@@ -206,27 +235,32 @@ Example style:
 `Westminster Cathedral, Victoria Street, Victoria, London SW1P 1LT`
 
 This field is deliberately more specific than `Place`.
+Do not label information source in this field, only physical location is relevant.
 
 ### When?
 - `Availability` is when it is possible to visit.
 - `Hours` breaks down what times during the `Availability` window it's possible to go.
 - `Length` describes what's the expected time spent at the venue
-- `Visit` will be filled in after the user went.
+- `Visit` records a specific planned or actual attendance, not public event availability.
 - Prefer date-only `Availability` plus `Hours` for normal event schedules.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
 This is the **event/experience availability window**, not the user's personal visit.
+Don't assume an experience was available only on the user's visit date.
+Research its availability separately; leave it blank if unknown.
 For exhibitions/plays research when the opening night was and backdate if necessary.
 
 Examples:
 - a one-day festival → that event date
+- a single show/performance → time range on the day with stand and end times.
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
 Prefer date-only values for event run dates, even for a one-day event.
 For one-day events, don't use a date range, just a date.
-Do not put ordinary opening/session hours into `Availability` when `Hours` can represent them, except when there's actually only a single performance of something.
+For events with opening hours and flexible visit times do not put hours into `Availability` when `Hours` can represent them.
+When there is only one fixed performance/session, store its exact local start datetime in `Availability`; do not duplicate that start time in `Hours`.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -235,8 +269,10 @@ Date/time rules
 
 #### `Hours`
 Human-readable public opening/event/session hours.
+Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
-For scheduled performance-like events put the starting time only, `Length` implies end time.
+For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
+For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
 Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
@@ -272,7 +308,8 @@ Only set when the user explicitly says:
 - they booked a specific performance/session,
 - or when they actually went.
 
-Use the specific visit/performance datetime range when known.
+Use a specific visit/performance datetime range when known; otherwise use date-only.
+Corroborate via relevant connected sources when available, especially on request.
 
 **Never copy `Availability` into `Visit` just because the event occurs on one day.**
 
@@ -310,6 +347,29 @@ When the user supplies photo/image of a poster:
 Upload the file, if the Notion connector supports writing the property's existing file/source format.
 If the connector cannot safely write `Inspired by`, do not fabricate a file value, call it out in final summary.
 
+#### `Previous` / `Next`
+Use these directional relations for successive editions of the same event or experience series.
+
+- Next and Previous are symmetric properties, setting one will automatically set the other: `A.Next = B` ≡ `B.Previous = A`.
+- Link each edition to the nearest confirmed existing earlier/later edition, in chronological order.
+- Do not fabricate missing editions or create placeholders for cancelled or unannounced editions merely to complete a chain.
+- Research and create an absent historical edition only when the user requests it and treat each edition as an independent event, do not copy properties unless substantiated.
+- Preserve existing links unless need to be meaningfully replaced to insert into a chain. (e.g. inserting a 2025 event into a 2024 -> 2026 existing relation)
+- Avoid duplicates and self-links.
+
+#### `Related`
+Use this non-directional relation for a meaningful connection between distinct experiences
+
+- Related is a symmetric property, setting one will automatically set the other: `A.Related = B` ≡ `B.Related = A`.
+- Link the relevant entries across series without merging their `Previous`/`Next` chains.
+- Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
+- Preserve existing unrelated relations
+- Avoid duplicates and self-links.
+
+#### `Discounts`
+Use an existing matching discount relation only when it clearly applies.
+Never create a Discount record just to fill this property.
+
 ### `Trailer`
 Add only a clearly official or directly relevant trailer/promo video.
 Do not add generic reviews, unrelated clips, or random coverage videos.
@@ -325,11 +385,6 @@ Use only when there is a directly relevant:
 Try to upload as image/PDF file, only link to external sources as last resort, call out if cannot upload.
 Do not genearte an artificial attachment, only from official sources.
 
-#### `Discounts`
-Use an existing matching discount relation only when it clearly applies.
-Never create a Discount record just to fill this property.
-
-
 ### Booking details
 
 Personal/planning fields: do not infer. These fields describe the user's plans/history, not public event facts.
@@ -344,7 +399,8 @@ QR code as image file attachment or PDF. A link to external page showing actual 
 A public ticket-sales URL does not belong in `Tickets`.
 
 #### `Trip`
-Only relate when the conversation explicitly ties the item to an existing trip.
+Only relate when the conversation or reliable records link the experience to an existing trip.
+Verify the dates and itinerary, so another journey to the same place is not confused with it.
 Do not create a new `Trip` unless explicitly asked.
 
 
@@ -352,13 +408,14 @@ Do not create a new `Trip` unless explicitly asked.
 
 Confirm all of the following:
 
-- The supplied link was actually opened/researched.
-- Primary/official sources were checked where useful.
+- Relevant supplied links, descriptions and evidence were inspected.
+- Suitable public or personal sources were checked where useful.
 - A duplicate search was performed.
 - The current Go-list schema was fetched.
-- `Availability` and `Visit` were not conflated.
-- `Hours` contains event/opening hours when known.
-- `Location` is detailed while `Place` uses an appropriate existing broader relation.
+- `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
+- `Hours` contains event/opening hours when known, except for a single fixed performance/session whose start datetime is stored in `Availability`.
+- `Length` was researched and stored when a reliable duration is available.
+- `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
 - No new Place was created without explicit user approval.
 - No new select options were invented.
 - Read-only/formula fields were not written.
