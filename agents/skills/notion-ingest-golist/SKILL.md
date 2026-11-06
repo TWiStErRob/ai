@@ -253,12 +253,14 @@ For exhibitions/plays research when the opening night was and backdate if necess
 
 Examples:
 - a one-day festival → that event date
+- a single show/performance → time range on the day with stand and end times.
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
 Prefer date-only values for event run dates, even for a one-day event.
 For one-day events, don't use a date range, just a date.
-Do not put ordinary opening/session hours into `Availability` when `Hours` can represent them, except when there's actually only a single performance of something.
+For events with opening hours and flexible visit times do not put hours into `Availability` when `Hours` can represent them.
+When there is only one fixed performance/session, store its exact local start datetime in `Availability`; do not duplicate that start time in `Hours`.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -269,7 +271,8 @@ Date/time rules
 Human-readable public opening/event/session hours.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
-For scheduled performance-like events put the starting time only, `Length` implies end time.
+For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
+For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
 Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
@@ -392,7 +395,8 @@ Confirm all of the following:
 - A duplicate search was performed.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
-- `Hours` contains event/opening hours when known.
+- `Hours` contains event/opening hours when known, except for a single fixed performance/session whose start datetime is stored in `Availability`.
+- `Length` was researched and stored when a reliable duration is available.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
 - No new Place was created without explicit user approval.
 - No new select options were invented.
