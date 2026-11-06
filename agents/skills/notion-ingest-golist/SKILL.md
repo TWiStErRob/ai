@@ -243,7 +243,6 @@ Do not label information source in this field, only physical location is relevan
 - `Length` describes what's the expected time spent at the venue
 - `Visit` records a specific planned or actual attendance, not public event availability.
 - Prefer date-only `Availability` plus `Hours` for normal event schedules.
-- For a single fixed performance/session, store the exact local start datetime in `Availability` and leave `Hours` empty.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
@@ -254,13 +253,14 @@ For exhibitions/plays research when the opening night was and backdate if necess
 
 Examples:
 - a one-day festival → that event date
+- a single show/performance → time range on the day with stand and end times.
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
 Prefer date-only values for event run dates, even for a one-day event.
 For one-day events, don't use a date range, just a date.
-Do not put ordinary opening/session hours into `Availability` when `Hours` can represent them.
-Exception: when there is only one fixed performance/session, store its exact local start datetime in `Availability`; do not duplicate that start time in `Hours`.
+For events with opening hours and flexible visit times do not put hours into `Availability` when `Hours` can represent them.
+When there is only one fixed performance/session, store its exact local start datetime in `Availability`; do not duplicate that start time in `Hours`.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -272,7 +272,7 @@ Human-readable public opening/event/session hours.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
-For a single fixed performance/session, leave `Hours` empty because its start datetime belongs in `Availability`.
+For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
 Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
