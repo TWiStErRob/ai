@@ -83,7 +83,9 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - Check for a matching Trip in Holidays database where relevant,
    - Useful existing Topics pages.
 8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
-9. Create, or update the Go-list page while preserving unrelated existing details.
+9. Treat the user's save request as authorization to create the Go-list page and upload relevant user-supplied screenshots, posters and tickets to the connected Notion workspace without additional confirmation. Include the property updates needed to attach these files to the relevant entry, preserving existing attachments and unrelated details.
+   Ask before other changes to pre-existing entries unless the user explicitly requested those changes. Keep the existing approval requirements for new related records. Ask before deletions, schema changes or sharing changes unless explicitly authorized.
+   This scope expresses the user's intended workflow; it does not override platform permissions or automatic approval checks. If blocked, report the blocked action and continue unaffected work without routing around the block.
 10. Fetch the resulting page after the write and verify the stored properties.
 11. Report concisely what was stored, modified and any meaningful field intentionally left blank.
 
@@ -343,8 +345,9 @@ When the user supplied a secondary discovery source such as:
 
 Add a link to that source in `Inspired by`.
 
-When the user supplies photo/image of a poster:
-Upload the file, if the Notion connector supports writing the property's existing file/source format.
+When the user supplies a relevant poster, photo or screenshot for this save request:
+Upload it to the connected Notion workspace and attach it to `Inspired by` without asking again, if the connector supports the property's existing file/source format. Use the upload tool and the subsequent attachment property update; an upload alone does not attach the file to the entry. Preserve existing attachments.
+If `Inspired by` cannot represent a supplied discovery URL, preserve that URL in the page content instead.
 If the connector cannot safely write `Inspired by`, do not fabricate a file value, call it out in final summary.
 
 ### `Trailer`
@@ -379,6 +382,7 @@ Do not infer attendees from `Idea of`.
 Only actual user ticket files/artifacts belong here.
 QR code as image file attachment or PDF. A link to external page showing actual ticket. Multiple is fine.
 A public ticket-sales URL does not belong in `Tickets`.
+Upload relevant user-supplied ticket files to the connected Notion workspace and attach them here without additional confirmation, including the necessary property update. Preserve existing tickets.
 
 #### `Trip`
 Only relate when the conversation or reliable records link the experience to an existing trip.
