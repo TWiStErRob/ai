@@ -83,7 +83,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - Search the Places database for an appropriate existing Place relation
    - Check for a matching Trip in Holidays database where relevant,
    - Useful existing Topics pages.
-   - Search for earlier/later editions and meaningfully related experiences. Fetch candidate pages to confirm their identity and current relations before linking; distinguish editions of one series from separate seasonal or similarly named events.
+   - Search for earlier/later editions and meaningfully related experiences.
 8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
 9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
