@@ -49,6 +49,8 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 - Tickets
 - Trailer
 - Map / Guide
+- Previous / Next
+- Related
 
 ## Workflow
 
@@ -84,6 +86,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - Search the Places database for an appropriate existing Place relation
    - Check for a matching Trip in Holidays database where relevant,
    - Useful existing Topics pages.
+   - Search for earlier/later editions and meaningfully related experiences.
 8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
 9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
@@ -98,9 +101,6 @@ Do not invent values for:
 - `Agenda`
 - `Agenda Items`
 - `Schedule`
-- `Previous`
-- `Next`
-- `Related`
 
 Only set them when the conversation or existing database structure makes the relationship explicit.
 
@@ -257,12 +257,14 @@ For an indefinite or rolling-horizon attraction, store a date range from the bes
 
 Examples:
 - a one-day festival → that event date
+- a single show/performance → time range on the day with stand and end times.
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
 Prefer date-only values for event run dates, even for a one-day event.
 For one-day events, don't use a date range, just a date.
-Do not put ordinary opening/session hours into `Availability` when `Hours` can represent them, except when there's actually only a single performance of something.
+For events with opening hours and flexible visit times do not put hours into `Availability` when `Hours` can represent them.
+When there is only one fixed performance/session, store its exact local start datetime in `Availability`; do not duplicate that start time in `Hours`.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -273,7 +275,8 @@ Date/time rules
 Human-readable public opening/event/session hours.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
-For scheduled performance-like events put the starting time only, `Length` implies end time.
+For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
+For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
 Research exact starts in the live booking flow across representative future dates for every operating weekday; prefer dates far enough ahead to reduce sold-out gaps. Do not settle for `times vary by date` when a useful pattern can be established. Keep the stored schedule compact:
 - For frequent exhibition/attraction admissions, use first–last entry ranges and the verified interval, rather than listing every slot. Preserve material gaps or exceptions without implying continuous availability.
 - For performances and distinct missions/sessions, list exact starts by weekday or format.
@@ -360,6 +363,29 @@ When the user supplies photo/image of a poster:
 Upload the file, if the Notion connector supports writing the property's existing file/source format.
 If the connector cannot safely write `Inspired by`, do not fabricate a file value, call it out in final summary.
 
+#### `Previous` / `Next`
+Use these directional relations for successive editions of the same event or experience series.
+
+- Next and Previous are symmetric properties, setting one will automatically set the other: `A.Next = B` ≡ `B.Previous = A`.
+- Link each edition to the nearest confirmed existing earlier/later edition, in chronological order.
+- Do not fabricate missing editions or create placeholders for cancelled or unannounced editions merely to complete a chain.
+- Research and create an absent historical edition only when the user requests it and treat each edition as an independent event, do not copy properties unless substantiated.
+- Preserve existing links unless need to be meaningfully replaced to insert into a chain. (e.g. inserting a 2025 event into a 2024 -> 2026 existing relation)
+- Avoid duplicates and self-links.
+
+#### `Related`
+Use this non-directional relation for a meaningful connection between distinct experiences
+
+- Related is a symmetric property, setting one will automatically set the other: `A.Related = B` ≡ `B.Related = A`.
+- Link the relevant entries across series without merging their `Previous`/`Next` chains.
+- Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
+- Preserve existing unrelated relations
+- Avoid duplicates and self-links.
+
+#### `Discounts`
+Use an existing matching discount relation only when it clearly applies.
+Never create a Discount record just to fill this property.
+
 ### `Trailer`
 Add only a clearly official or directly relevant trailer/promo video.
 Do not add generic reviews, unrelated clips, or random coverage videos.
@@ -374,11 +400,6 @@ Use only when there is a directly relevant:
 
 Try to upload as image/PDF file, only link to external sources as last resort, call out if cannot upload.
 Do not genearte an artificial attachment, only from official sources.
-
-#### `Discounts`
-Use an existing matching discount relation only when it clearly applies.
-Never create a Discount record just to fill this property.
-
 
 ### Booking details
 
@@ -408,7 +429,8 @@ Confirm all of the following:
 - A duplicate search was performed.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
-- `Hours` contains event/opening hours when known.
+- `Hours` contains event/opening hours when known, except for a single fixed performance/session whose start datetime is stored in `Availability`.
+- `Length` was researched and stored when a reliable duration is available.
 - Exact bookable starts were researched across representative dates and summarized compactly without losing material gaps or exceptions.
 - Admission times and closing times are distinguished; surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
 - Structured facts stay in properties; the description contains useful additional detail rather than a research transcript.
