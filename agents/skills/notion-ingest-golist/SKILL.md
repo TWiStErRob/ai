@@ -327,21 +327,6 @@ If ambiguous, assume NO, and call out it end report.
 
 ### Metadata
 
-#### `Previous` / `Next`
-Use these directional relations for successive editions of the same event or experience series.
-
-- Link each edition to the nearest confirmed existing earlier/later edition, in chronological order. Set the reciprocal relation too: A.Next = B and B.Previous = A. Inspect whether Notion maintains the reciprocal side automatically before writing it again.
-- Keep different seasonal programmes or formats in separate chains, even at the same venue or with the same organiser. A shared theme or perceived spiritual succession alone does not establish series continuity; use `Related` instead. Follow an explicit user choice to group them differently.
-- Do not fabricate missing editions or create placeholders for cancelled or unannounced editions merely to complete a chain. Research and create an absent historical edition only within the user's requested scope; do not copy another edition's dates, hours, or attendance.
-- Preserve unrelated links. When inserting an edition into an existing chain, replace only the superseded adjacency so the sequence stays consistent.
-
-#### `Related`
-Use this non-directional relation for a meaningful connection between distinct experiences, including separate seasonal series or a thematic successor whose continuity is unconfirmed.
-
-- Link the relevant entries across series without merging their `Previous`/`Next` chains. Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
-- Preserve existing unrelated relations, avoid duplicates and self-links, and verify both sides of the connection, allowing for Notion's reciprocal updates.
-- When correcting edition links stored in `Related`, establish and verify the appropriate `Previous`/`Next` links first, then remove only the migrated links from `Related`. Retain genuine cross-series connections there.
-
 #### `Idea of`
 Who proposed to go, it could be someone who doesn't necessarily attend in the end: like a friend can suggest that the user goes.
 Do not treat `Idea of` as `Attendees`.
@@ -359,6 +344,29 @@ When the user supplies photo/image of a poster:
 Upload the file, if the Notion connector supports writing the property's existing file/source format.
 If the connector cannot safely write `Inspired by`, do not fabricate a file value, call it out in final summary.
 
+#### `Previous` / `Next`
+Use these directional relations for successive editions of the same event or experience series.
+
+- Next and Previous are symmetric properties, setting one will automatically set the other: `A.Next = B` ≡ `B.Previous = A`.
+- Link each edition to the nearest confirmed existing earlier/later edition, in chronological order.
+- Do not fabricate missing editions or create placeholders for cancelled or unannounced editions merely to complete a chain.
+- Research and create an absent historical edition only when the user requests it and treat each edition as an independent event, do not copy properties unless substantiated.
+- Preserve existing links unless need to be meaningfully replaced to insert into a chain. (e.g. inserting a 2025 event into a 2024 -> 2026 existing relation)
+- Avoid duplicates and self-links.
+
+#### `Related`
+Use this non-directional relation for a meaningful connection between distinct experiences
+
+- Related is a symmetric property, setting one will automatically set the other: `A.Related = B` ≡ `B.Related = A`.
+- Link the relevant entries across series without merging their `Previous`/`Next` chains.
+- Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
+- Preserve existing unrelated relations
+- Avoid duplicates and self-links.
+
+#### `Discounts`
+Use an existing matching discount relation only when it clearly applies.
+Never create a Discount record just to fill this property.
+
 ### `Trailer`
 Add only a clearly official or directly relevant trailer/promo video.
 Do not add generic reviews, unrelated clips, or random coverage videos.
@@ -373,11 +381,6 @@ Use only when there is a directly relevant:
 
 Try to upload as image/PDF file, only link to external sources as last resort, call out if cannot upload.
 Do not genearte an artificial attachment, only from official sources.
-
-#### `Discounts`
-Use an existing matching discount relation only when it clearly applies.
-Never create a Discount record just to fill this property.
-
 
 ### Booking details
 
