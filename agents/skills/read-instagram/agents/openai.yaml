@@ -1,0 +1,4 @@
+interface:
+  display_name: "Read Instagram"
+  short_description: "Read Instagram links before requesting screenshots"
+  default_prompt: "Use $read-instagram to inspect this post and extract the relevant details."
