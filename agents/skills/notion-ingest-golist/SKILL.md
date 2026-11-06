@@ -49,7 +49,8 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 - Tickets
 - Trailer
 - Map / Guide
-- Previous / Next / Related
+- Previous / Next
+- Related
 
 ## Workflow
 
