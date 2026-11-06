@@ -405,7 +405,6 @@ Confirm all of the following:
 - Relevant supplied links, descriptions and evidence were inspected.
 - Suitable public or personal sources were checked where useful.
 - A duplicate search was performed.
-- Edition identity, chronological adjacency and reciprocal `Previous`/`Next` links were verified; distinct series use `Related`, and unrelated relations were preserved.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known.
