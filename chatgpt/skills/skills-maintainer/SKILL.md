@@ -64,8 +64,6 @@ retry only when there is evidence that a changed approach can succeed.
 
 ## Live ChatGPT to Git
 
-For an explicit PR request, prepare and validate the proposed repository version instead of editing and saving the installed skill in steps 3–5. Compare installed content only when relevant, preserve unrelated differences, and record the repository base and proposed revision rather than claiming an installed update. Continue with the existing PR and post-merge workflow.
-
 1. Read the latest `main` commit, the allow-list, and the mapped canonical skill tree.
 2. Compare the installed skill with Git and identify the live changes to record;
    reconcile independently changed Git content without replacing the live source.
