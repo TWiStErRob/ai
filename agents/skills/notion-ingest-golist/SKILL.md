@@ -92,15 +92,17 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 
 ## Property conventions
 
-### Out of scope
+### Structural and computed fields
 
 #### Structural relation fields
-Do not invent values for:
-- `Agenda`
-- `Agenda Items`
-- `Schedule`
 
-Only set them when the conversation or existing database structure makes the relationship explicit.
+Use `Agenda Items` and `Schedule` for confirmed parent–child relationships within Go-list:
+- The parent series, collection or festival lists its individual entries in `Agenda Items`.
+- Each individual entry points to its parent through `Schedule`.
+- These are reciprocal properties: `Parent.Agenda Items = Child` ≡ `Child.Schedule = Parent`. Write one side, then verify the reciprocal result before writing it again.
+- Fetch existing entries before linking, preserve unrelated relations, and avoid duplicates and self-links. Only link relationships supported by the conversation or existing database structure.
+
+`Agenda` is a legacy relation to a separate festival-performances database, pending migration. Preserve existing values; do not use it for new Go-list parent–child links or migrate it unless explicitly requested.
 
 #### Read-only/computed fields
 
