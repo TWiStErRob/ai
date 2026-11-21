@@ -7,6 +7,7 @@ home:
   default: ~/.chatgpt
 
 links:
+  skills/read-instagram: ../agents/skills/read-instagram
   skills/notion-ingest-contents: ../agents/skills/notion-ingest-contents
   skills/notion-ingest-golist: ../agents/skills/notion-ingest-golist
   skills/notion-ingest-watchlist: ../agents/skills/notion-ingest-watchlist
