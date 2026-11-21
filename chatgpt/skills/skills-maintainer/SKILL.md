@@ -39,6 +39,7 @@ Do not modify or synchronize skills absent from this allow-list unless the user 
 
 ## Choose the direction
 
+- A request to **create/open a PR**, or make changes **through/in a PR**, prepares the proposed changes on a repository branch without changing the installed skill before merge. This takes precedence over the live-first default; follow the existing post-merge deployment workflow.
 - A request to **improve, change, fix, or update** a live skill is live-first: update ChatGPT, then record that exact result in GitHub.
 - A request to **pull, refresh, restore, or sync from main** is Git-first: read the latest `main`, then update ChatGPT.
 - A request to **compare, inspect, or show status** is read-only.
