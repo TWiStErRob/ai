@@ -92,19 +92,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 
 ## Property conventions
 
-### Structural and computed fields
-
-#### Structural relation fields
-
-Use `Agenda Items` and `Schedule` for confirmed parent–child relationships within Go-list:
-- The parent series, collection or festival lists its individual entries in `Agenda Items`.
-- Each individual entry points to its parent through `Schedule`.
-- These are reciprocal properties: `Parent.Agenda Items = Child` ≡ `Child.Schedule = Parent`. Write one side, then verify the reciprocal result before writing it again.
-- Fetch existing entries before linking, preserve unrelated relations, and avoid duplicates and self-links. Only link relationships supported by the conversation or existing database structure.
-
-`Agenda` is a legacy relation to a separate festival-performances database, pending migration. Preserve existing values; do not use it for new Go-list parent–child links or migrate it unless explicitly requested.
-
-#### Read-only/computed fields
+### Read-only/computed fields
 
 Never write formula/rollup fields such as:
 - `Anytime`
@@ -360,13 +348,24 @@ Use these directional relations for successive editions of the same event or exp
 - Avoid duplicates and self-links.
 
 #### `Related`
-Use this non-directional relation for a meaningful connection between distinct experiences
+Use this non-directional relation for a meaningful connection between distinct experiences.
 
 - Related is a symmetric property, setting one will automatically set the other: `A.Related = B` ≡ `B.Related = A`.
 - Link the relevant entries across series without merging their `Previous`/`Next` chains.
 - Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
 - Preserve existing unrelated relations
 - Avoid duplicates and self-links.
+
+#### `Agenda Items` / `Schedule`
+Use this directional relation for confirmed parent-child relationships.
+
+- These are reciprocal properties, setting one will automatically set the other: `Parent.Agenda Items = Child` ≡ `Child.Schedule = Parent`.
+- Anything with multiple separately bookable/attendable events can use `Agenda Items` to the break the schedule down.
+- Each individual entry points to its parent through `Schedule` property.
+- Preserve existing unrelated relations
+- Avoid duplicates and self-links.
+
+Note: `Agenda` is a legacy relation to a separate festival-performances database, pending migration. Preserve existing values; do not use it for new Go-list parent–child links or migrate it unless explicitly requested.
 
 #### `Discounts`
 Use an existing matching discount relation only when it clearly applies.
