@@ -92,17 +92,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 
 ## Property conventions
 
-### Out of scope
-
-#### Structural relation fields
-Do not invent values for:
-- `Agenda`
-- `Agenda Items`
-- `Schedule`
-
-Only set them when the conversation or existing database structure makes the relationship explicit.
-
-#### Read-only/computed fields
+### Read-only/computed fields
 
 Never write formula/rollup fields such as:
 - `Anytime`
@@ -358,13 +348,24 @@ Use these directional relations for successive editions of the same event or exp
 - Avoid duplicates and self-links.
 
 #### `Related`
-Use this non-directional relation for a meaningful connection between distinct experiences
+Use this non-directional relation for a meaningful connection between distinct experiences.
 
 - Related is a symmetric property, setting one will automatically set the other: `A.Related = B` ≡ `B.Related = A`.
 - Link the relevant entries across series without merging their `Previous`/`Next` chains.
 - Do not link every edition indiscriminately or infer a relationship solely from a shared venue or organiser.
 - Preserve existing unrelated relations
 - Avoid duplicates and self-links.
+
+#### `Schedule` / `Part of`
+Use this directional relation for confirmed parent-child relationships.
+
+- These are reciprocal properties, setting one will automatically set the other: `Parent.Schedule = Child` ≡ `Child.Part of = Parent`.
+- Use `Schedule` to list separately bookable/attendable events.
+- Each individual entry points to its parent through `Part of` property.
+- Preserve existing unrelated relations
+- Avoid duplicates and self-links.
+
+Note: `Festival Performances` is a legacy relation to a separate festival-performances database, pending migration. Preserve existing values; do not use it for new Go-list parent–child links or migrate it unless explicitly requested.
 
 #### `Discounts`
 Use an existing matching discount relation only when it clearly applies.
