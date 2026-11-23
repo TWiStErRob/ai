@@ -239,7 +239,6 @@ Do not label information source in this field, only physical location is relevan
 - `Hours` records opening hours, selectable start times, or additional timing details.
 - `Length` describes what's the expected time spent at the venue
 - `Visit` records a specific planned or actual attendance, not public event availability.
-- Prefer date-only `Availability` plus `Hours` for runs with opening hours or selectable sessions.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
@@ -251,15 +250,13 @@ For indefinitely open attraction, set the end date to the rolling booking-horizo
 (This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
-- a one-day festival open 11:00–17:00 → that date with the 11:00–17:00 range in `Availability`
-- a one-day festival with unknown timings → that event date in `Availability`
+- a one-day festival open 11:00–17:00 → that date and time range
 - a single performance → its start and end datetime range in `Availability`
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
-Use date-only values for event runs where `Hours` describes the schedule across dates.
-For a single event or session, store the published local opening and closing times or start and end times as a datetime range in `Availability`, including when arrival is flexible.
-If only the start time is known, use a single datetime. If only the date is known, use a single date.
+For a single occurrence, use the published local time range, even with flexible arrival. Use a single datetime if only the start time is known, or a single date if times are unknown.
+For recurring schedules or a choice of sessions, put dates in `Availability` and the schedule in `Hours`.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -267,12 +264,11 @@ Date/time rules
 - Avoid UTC conversion mistakes that shift the calendar date.
 
 #### `Hours`
-Human-readable public opening/event/session hours.
 If opening/starting times are not clearly listed, research using the live booking flow, but do not infer published opening/closing hours from the slot list.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
-When `Availability` contains the event's time window, use `Hours` only for additional published timings, such as doors opening or last entry. Leave `Hours` blank when there are none.
+When `Availability` includes times, use `Hours` only for extra timings such as doors opening or last entry.
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
 
