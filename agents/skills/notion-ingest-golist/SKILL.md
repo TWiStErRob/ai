@@ -339,10 +339,12 @@ If ambiguous, assume NO, and call out it end report.
 
 ### Page content
 
-Research thoroughly, but store a concise description: a short overview and only practical details that affect choosing or booking the experience. Put structured facts in their properties; do not repeat dates, hours, duration, location or base price in the body. Avoid research logs, exhaustive price examples, routine caveats and duplicated source lists. Keep a booking link or brief source note only when useful beyond `URL`.
+Make best effort to keep it minimal, oftentimes empty; only use when other structured properties cannot represent the details presented.
+Avoid research logs, repeating property values like date/hour/duration/location, exhaustive price examples, routine caveats, and duplicated source lists.
 
-For repeatable experiences, briefly describe materially different missions, games, routes or session variants and the booking notes needed to choose among them. Include useful optional add-ons and their costs without copying every bundle. If `Availability` ends at a booking horizon rather than a confirmed closing date, record that distinction in one short note.
-
+Only record different missions or variants in the page body, if they're not materially different enough to warrant creating multiple pages.
+For repeatable experiences, briefly describe materially different missions, games, routes or session variants and the booking notes needed to choose among them.
+Include useful optional add-ons and their costs without copying every bundle from original source.
 
 ### Metadata
 
