@@ -458,8 +458,17 @@ Confirm all of the following:
 
 Keep the completion response concise.
 
-Link the entry, state whether it was created or updated, and summarize only key facts or changes and material uncertainties. Use a small table when comparison helps; show old/new values only for relevant changed fields. Do not dump every property, routine blank fields or verification steps unless the user requests a full audit.
+State:
+- a clear link to each affected page (ideally in the table heading)
+  - Use `https://www.notion.so/<username>/<page-id>` format for best cross-platform experience.
+- whether an entry was created or updated,
+- a table of all the affected properties, each on separate rows
+  - their values and potential remarks
+  - show original and updated value when entry was updated
+  - show new value when entry was updated or created
+  - Do not claim a property was stored unless the post-write fetch confirms it.
 
-Do not claim a property was stored unless the post-write fetch confirms it.
-
-Discuss skill improvements when requested or when a concrete recurring problem warrants a brief suggestion; do not append routine process commentary to every save.
+Exceptional cases:
+- List any important property left blank because the source was ambiguous or the connector could not safely represent it.
+- If `Availability` ends at a booking horizon rather than a confirmed closing date, record that distinction in a short note.
+- Discuss skill improvements when a concrete foreseeable recurring problem warrants a brief suggestion.
