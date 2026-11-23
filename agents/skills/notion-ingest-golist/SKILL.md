@@ -336,7 +336,6 @@ Use `NO` when:
 
 If ambiguous, assume NO, and call out it end report.
 
-
 ### Page content
 
 Make best effort to keep it minimal, oftentimes empty; only use when other structured properties cannot represent the details presented.
