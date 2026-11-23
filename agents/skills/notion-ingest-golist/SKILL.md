@@ -89,7 +89,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - Check for a matching Trip in Holidays database where relevant,
    - Useful existing Topics pages.
    - Search for earlier/later editions and meaningfully related experiences.
-8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
+8. Interpret each source detail in context and map it to the field that matches what it describes. Leave unsupported or inapplicable fields blank.
 9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
 11. Report concisely what was stored, modified and any meaningful field intentionally left blank.
@@ -250,12 +250,11 @@ For indefinitely open attraction, set the end date to the rolling booking-horizo
 (This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
-- a one-day festival open 11:00–17:00 → that date and time range
 - a single performance → its start and end datetime range in `Availability`
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
-If the entry has one continuous public availability window, store its published local start and end, even with flexible arrival. Use a single datetime if only the start time is known, or a single date if only the date is known.
+If the entry has one continuous public availability window, store its published local start and end. Use a single datetime if only the start time is known, or a single date if only the date is known.
 If availability depends on recurring hours or selectable sessions, store dates in `Availability` and the schedule in `Hours`.
 
 Date/time rules
