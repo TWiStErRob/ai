@@ -73,8 +73,10 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - materially different missions, formats, routes, or session variants
    - a specific planned or completed Visit, when supported
    - any relevant trip or information source
-4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Check dated announcements and live booking availability when published schedules conflict or restrictions materially affect planning, such as no after-work admission. Distinguish current facts from historical reports; do not infer when or why hours changed without evidence. Explain only material uncertainty.
-   When investigating reviews or complaints, look for evidence about the specific issue raised. Do not substitute unrelated criticism or treat an unsuccessful search as proof that no complaints exist.
+4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit.
+   Check dated announcements and live booking availability when published schedules conflict.
+   Distinguish current facts from historical reports.
+   Explain material uncertainty.
 5. Fetch the current Go-list database schema before writing.
 6. Search the Go-list for likely duplicates by:
    - event name
@@ -117,6 +119,9 @@ Use the concise official event/experience name.
 Include the year when:
 - it is part of the official name, or
 - it distinguishes an annual edition from other editions.
+
+#### `Tagline`
+Short one-liner that sums up the experience to anyone who doesn't know what this is.
 
 #### `Type`
 Choose the best existing `Type` option from the current schema.
@@ -241,9 +246,9 @@ Do not label information source in this field, only physical location is relevan
 This is the **event/experience availability window**, not the user's personal visit.
 Don't assume an experience was available only on the user's visit date.
 Research its availability separately; leave it blank if unknown.
-For exhibitions/plays research when the opening night was and backdate if necessary.
-
-For an indefinite or rolling-horizon attraction, store a date range from the best-supported opening, relaunch, or current-stint announcement date through the last date currently bookable. Treat the end as the **published booking horizon**, not a claimed closing date. This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates. Prefer a distinct current-stint start when the attraction has clearly relaunched, otherwise use the original opening date.
+For exhibitions/plays research when the opening or relaunch date was and backdate if necessary.
+For indefinitely open attraction, set the end date to the rolling-booking-horizon currently available.
+(This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
 - a one-day festival → that event date
@@ -263,25 +268,30 @@ Date/time rules
 
 #### `Hours`
 Human-readable public opening/event/session hours.
+If opening/starting times are not clearly listed, research using the live booking flow, but do not infer published opening/closing hours from the slot list.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
 For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
-Research exact starts in the live booking flow across representative future dates for every operating weekday; prefer dates far enough ahead to reduce sold-out gaps. Do not settle for `times vary by date` when a useful pattern can be established. Keep the stored schedule compact:
-- For frequent exhibition/attraction admissions, use first–last entry ranges and the verified interval, rather than listing every slot. Preserve material gaps or exceptions without implying continuous availability.
-- For performances and distinct missions/sessions, list exact starts by weekday or format.
-- Put materially different date periods on separate lines: `Date range: hours`. Group identical weekdays and summarize holiday exceptions; do not copy the entire booking calendar into the page.
-Label entry-slot ranges as admission times. A final bookable slot is the last available admission observed, not proof of closing time or permission to stay for the usual duration after it. Do not infer published opening/closing hours from the slot list; identify sold-out gaps as uncertain when relevant.
-Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
 
+Keep the stored schedule compact:
+ * Never settle for `times vary by date` when a simplified compact pattern can be established.
+ * List the opening entry range rather than listing every slot.
+ * Separate opening times, entry times, admission times with clear labelling, if rule is non-trivial.
+ * Break apart the range if there's a gap in the schedule, for example `Sat-Sun 10-13/15-19`
+ * State the verified interval in a separate line, for example: `Entry slots every 15 minutes.`
+ * Include last entry if known at the end on a separate line, for example: `Last entry 1 hour before closing.`
+ * Holiday and other exceptional hours/closing times should be stated in the session response, rather than inside the property.
+
 Follow the style already present in the database, for example:
-- `Mon-Thu 10-19, Fri 10-21, Sat 9-21, Sun 9-19, Bank 9-20` for varying opening times
-- `Wed/Thu/Fri 19:30, Sat 17:00/20:30, Sun 14:00/17:30` for varying schedule
-- `10–19` for same every day
-- `Wed–Sat evenings; 21:00 until mid-September, then 19:30`
-- `same as venue (...)` for hosted exhibitions, e.g. in Kew Gardens
+- Short daily breakdown: `Mon-Thu 10-19, Fri 10-21, Sat 9-21, Sun 9-19, Bank 9-20` for varying opening times
+- Day based: `Wed/Thu/Fri 19:30, Sat 17:00/20:30, Sun 14:00/17:30` for varying schedule
+- Time based: `Sat–Sun 16:00, Wed–Sun 19:00, Thu–Sat 21:30` for emphasizing which days have special/matinée/late starting times.
+- Short opening hours: `10–19` for same every day
+- Season timings: `Wed–Sat evenings; 21:00 until mid-September, then 19:30`
+- Exceptional description: `same as venue (...)` for hosted exhibitions, e.g. in Kew Gardens
 
 Include relevant exceptions.
 
@@ -432,11 +442,7 @@ Confirm all of the following:
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known, except for a single fixed performance/session whose start datetime is stored in `Availability`.
 - `Length` was researched and stored when a reliable duration is available.
-- Exact bookable starts were researched across representative dates and summarized compactly without losing material gaps or exceptions.
-- Admission times and closing times are distinguished; surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
-- Structured facts stay in properties; the description contains useful additional detail rather than a research transcript.
-- Rolling availability uses the current booking-horizon end and records that it is not necessarily a closing date.
-- Materially different missions or variants are captured in the page body when properties cannot represent them.
+- Surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
 - No new Place was created without explicit user approval.
 - No new select options were invented.
