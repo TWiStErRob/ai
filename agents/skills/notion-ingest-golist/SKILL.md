@@ -236,9 +236,10 @@ Do not label information source in this field, only physical location is relevan
 
 ### When?
 - `Availability` is when it is possible to visit.
-- `Hours` records opening hours, selectable start times, or extra timing details within or around the `Availability` window.
+- `Hours` breaks down what times during the `Availability` window it's possible to go.
 - `Length` describes what's the expected time spent at the venue
 - `Visit` records a specific planned or actual attendance, not public event availability.
+- Prefer date-only `Availability` plus `Hours` for normal event schedules.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
@@ -250,15 +251,14 @@ For indefinitely open attraction, set the end date to the rolling booking-horizo
 (This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
-- a one-day festival with flexible arrival → that event date in `Availability`, with opening or entry times in `Hours`
+- a one-day festival → that event date
 - a single performance → its start and end datetime range in `Availability`
-- a fixed event with several parts → `Availability` is , and `Hours` is `Mixer from 20:00`
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
-For a fixed event or session, store the published local start and end datetimes in `Availability`, even if they fall on the same day or the event has several parts.
-If only the start is known, store a single datetime.
-For a run with selectable sessions or an experience with flexible visit times, use date-only `Availability` for the date or run dates and put opening hours or selectable start times in `Hours`.
+Prefer date-only values for event run dates, even for a one-day event.
+For events with opening hours and flexible visit times do not put hours into `Availability` when `Hours` can represent them.
+For a single event or session with fixed times, store the published local start and end as a datetime range in `Availability`. If only the start is known, use a single datetime.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -271,8 +271,7 @@ If opening/starting times are not clearly listed, research using the live bookin
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
-For a fixed event or session, use `Hours` for extra timing details such as doors opening, last entry, or when a mixer starts.
-Leave it empty if there are no extra timings to record. Avoid repeating the overall event window from `Availability`.
+For a single event or session with fixed times, use `Hours` only for additional published timings, such as doors opening or last entry.
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
 
@@ -441,8 +440,7 @@ Confirm all of the following:
 - A duplicate search was performed.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
-- For fixed events, `Availability` contains the published start and end datetimes when known, and `Hours` contains only extra timing details.
-- For flexible visits or runs with selectable sessions, `Availability` is date-only and `Hours` contains the known opening hours or selectable start times.
+- Known event times and opening hours are recorded in `Availability` and `Hours` according to the rules above.
 - `Length` was researched and stored when a reliable duration is available.
 - Surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
