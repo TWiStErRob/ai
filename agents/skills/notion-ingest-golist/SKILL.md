@@ -70,9 +70,13 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - canonical official URL
    - official trailer/promo video if clearly relevant
    - whether the item is singular or repeatable
+   - materially different missions, formats, routes, or session variants
    - a specific planned or completed Visit, when supported
    - any relevant trip or information source
-4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit. Explain material uncertainty.
+4. Resolve discrepancies by the kind of fact: prefer current official sources for public details, and contemporaneous personal records for an individual's visit.
+   Check dated announcements and live booking availability when published schedules conflict.
+   Distinguish current facts from historical reports.
+   Explain material uncertainty.
 5. Fetch the current Go-list database schema before writing.
 6. Search the Go-list for likely duplicates by:
    - event name
@@ -115,6 +119,9 @@ Use the concise official event/experience name.
 Include the year when:
 - it is part of the official name, or
 - it distinguishes an annual edition from other editions.
+
+#### `Tagline`
+Short one-liner that sums up the experience to anyone who doesn't know what this is.
 
 #### `Type`
 Choose the best existing `Type` option from the current schema.
@@ -239,7 +246,9 @@ Do not label information source in this field, only physical location is relevan
 This is the **event/experience availability window**, not the user's personal visit.
 Don't assume an experience was available only on the user's visit date.
 Research its availability separately; leave it blank if unknown.
-For exhibitions/plays research when the opening night was and backdate if necessary.
+For exhibitions/plays research when the opening or relaunch date was and backdate if necessary.
+For indefinitely open attraction, set the end date to the rolling booking-horizon currently available.
+(This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
 - a one-day festival → that event date
@@ -259,20 +268,30 @@ Date/time rules
 
 #### `Hours`
 Human-readable public opening/event/session hours.
+If opening/starting times are not clearly listed, research using the live booking flow, but do not infer published opening/closing hours from the slot list.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
 For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
-Include last entry if known at the end: `... Last entry 1 hour before closing.`
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
 
+Keep the stored schedule compact:
+ * Never settle for `times vary by date` when a simplified compact pattern can be established.
+ * List the opening entry range rather than listing every slot.
+ * Separate opening times, entry times, admission times with clear labelling, if rule is non-trivial.
+ * Break apart the range if there's a gap in the schedule, for example `Sat-Sun 10-13/15-19`
+ * State the verified interval in a separate line, for example: `Entry slots every 15 minutes.`
+ * Include last entry if known at the end on a separate line, for example: `Last entry 1 hour before closing.`
+ * Holiday and other exceptional hours/closing times should be stated in the session response, rather than inside the property.
+
 Follow the style already present in the database, for example:
-- `Mon-Thu 10-19, Fri 10-21, Sat 9-21, Sun 9-19, Bank 9-20` for varying opening times
-- `Wed/Thu/Fri 19:30, Sat 17:00/20:30, Sun 14:00/17:30` for varying schedule
-- `10–19` for same every day
-- `Wed–Sat evenings; 21:00 until mid-September, then 19:30`
-- `same as venue (...)` for hosted exhibitions, e.g. in Kew Gardens
+- Short daily breakdown: `Mon-Thu 10-19, Fri 10-21, Sat 9-21, Sun 9-19, Bank 9-20` for varying opening times
+- Day based: `Wed/Thu/Fri 19:30, Sat 17:00/20:30, Sun 14:00/17:30` for varying schedule
+- Time based: `Sat–Sun 16:00, Wed–Sun 19:00, Thu–Sat 21:30` for emphasizing which days have special/matinée/late starting times.
+- Short opening hours: `10–19` for same every day
+- Season timings: `Wed–Sat evenings; 21:00 until mid-September, then 19:30`
+- Exceptional description: `same as venue (...)` for hosted exhibitions, e.g. in Kew Gardens
 
 Include relevant exceptions.
 
@@ -317,6 +336,14 @@ Use `NO` when:
 
 If ambiguous, assume NO, and call out it end report.
 
+### Page content
+
+Make best effort to keep it minimal, oftentimes empty; only use when other structured properties cannot represent the details presented.
+Avoid research logs, repeating property values like date/hour/duration/location, exhaustive price examples, routine caveats, and duplicated source lists.
+
+Only record different missions or variants in the page body, if they're not materially different enough to warrant creating multiple pages.
+For repeatable experiences, briefly describe materially different missions, games, routes or session variants and the booking notes needed to choose among them.
+Include useful optional add-ons and their costs without copying every bundle from original source.
 
 ### Metadata
 
@@ -416,6 +443,7 @@ Confirm all of the following:
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
 - `Hours` contains event/opening hours when known, except for a single fixed performance/session whose start datetime is stored in `Availability`.
 - `Length` was researched and stored when a reliable duration is available.
+- Surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
 - No new Place was created without explicit user approval.
 - No new select options were invented.
@@ -430,13 +458,16 @@ Confirm all of the following:
 Keep the completion response concise.
 
 State:
+- a clear link to each affected page (ideally in the table heading)
+  - Use `https://www.notion.so/<username>/<page-id>` format for best cross-platform experience.
 - whether an entry was created or updated,
-- a table of all the fields
+- a table of all the affected properties, each on separate rows
   - their values and potential remarks
-  - show original value when entry was updated
+  - show original and updated value when entry was updated
   - show new value when entry was updated or created
-  - any important field left blank because the source was ambiguous or the connector could not safely represent it.
+  - Do not claim a property was stored unless the post-write fetch confirms it.
 
-Do not claim a property was stored unless the post-write fetch confirms it.
-
-Propose any improvements to this skill based on learnings from the conversation/research conducted.
+Exceptional cases:
+- List any important property left blank because the source was ambiguous or the connector could not safely represent it.
+- If `Availability` ends at a booking horizon rather than a confirmed closing date, record that distinction in a short note.
+- Discuss skill improvements when a concrete foreseeable recurring problem warrants a brief suggestion.
