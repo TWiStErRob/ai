@@ -54,7 +54,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 
 ## Workflow
 
-1. Identify the exact item from the supplied link, description, or evidence, and inspect relevant sources.
+1. Identify what the user wants the entry to represent from their request and the evidence, then inspect relevant sources.
 2. Research or corroborate beyond the supplied material when useful.
    - Prefer primary sources: official organiser, official event site, official venue, official ticket page
    - For past events: use the user's relevant connected calendar, e-mail, messages, location history, tickets, receipts, statements.
@@ -255,8 +255,8 @@ Examples:
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
-For a single occurrence, use the published local time range, even with flexible arrival. Use a single datetime if only the start time is known, or a single date if times are unknown.
-For recurring schedules or a choice of sessions, put dates in `Availability` and the schedule in `Hours`.
+If the entry has one continuous public availability window, store its published local start and end, even with flexible arrival. Use a single datetime if only the start time is known, or a single date if only the date is known.
+If availability depends on recurring hours or selectable sessions, store dates in `Availability` and the schedule in `Hours`.
 
 Date/time rules
 - Preserve the event's local timezone.
