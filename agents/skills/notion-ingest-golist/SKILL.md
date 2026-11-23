@@ -251,8 +251,8 @@ For indefinitely open attraction, set the end date to the rolling booking-horizo
 
 Examples:
 - a one-day festival with flexible arrival → that event date in `Availability`, with opening or entry times in `Hours`
-- a single performance → its start and end datetimes in `Availability`
-- a fixed social event with several parts → `Availability` is 17 Apr 2027, 17:00–22:00, and `Hours` is `Mixer from 20:00`
+- a single performance → its start and end datetime range in `Availability`
+- a fixed event with several parts → `Availability` is , and `Hours` is `Mixer from 20:00`
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
