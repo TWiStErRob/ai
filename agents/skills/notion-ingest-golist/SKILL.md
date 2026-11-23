@@ -54,7 +54,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
 
 ## Workflow
 
-1. Identify the exact item from the supplied link, description, or evidence, and inspect relevant sources.
+1. Identify what the user wants the entry to represent from their request and the evidence, then inspect relevant sources.
 2. Research or corroborate beyond the supplied material when useful.
    - Prefer primary sources: official organiser, official event site, official venue, official ticket page
    - For past events: use the user's relevant connected calendar, e-mail, messages, location history, tickets, receipts, statements.
@@ -89,7 +89,7 @@ Create (or update) a new page in the Go-list database, filling in all relevant p
    - Check for a matching Trip in Holidays database where relevant,
    - Useful existing Topics pages.
    - Search for earlier/later editions and meaningfully related experiences.
-8. Map only facts that are genuinely supported. Do not fill a field merely because it exists.
+8. Map supported facts by their meaning to the most suitable structured properties, preserving their precision. Use free text for details that have no suitable structured representation.
 9. Create, or update the Go-list page while preserving unrelated existing details.
 10. Fetch the resulting page after the write and verify the stored properties.
 11. Report concisely what was stored, modified and any meaningful field intentionally left blank.
@@ -235,11 +235,10 @@ This field is deliberately more specific than `Place`.
 Do not label information source in this field, only physical location is relevant.
 
 ### When?
-- `Availability` is when it is possible to visit.
-- `Hours` breaks down what times during the `Availability` window it's possible to go.
+- `Availability` is the overall period when the entry is available.
+- `Hours` adds schedules or timing details that qualify `Availability`.
 - `Length` describes what's the expected time spent at the venue
 - `Visit` records a specific planned or actual attendance, not public event availability.
-- Prefer date-only `Availability` plus `Hours` for normal event schedules.
 - Use datetime values for `Visit` only when the user's actual/planned visit time is known.
 
 #### `Availability`
@@ -251,15 +250,13 @@ For indefinitely open attraction, set the end date to the rolling booking-horizo
 (This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
-- a one-day festival → that event date
-- a single show/performance → time range on the day with stand and end times.
+- a single performance → its start and end datetime range in `Availability`
 - a theatre production → first-to-last run dates
 - a long-running exhibition → opening date through known closing date
 
-Prefer date-only values for event run dates, even for a one-day event.
-For one-day events, don't use a date range, just a date.
-For events with opening hours and flexible visit times do not put hours into `Availability` when `Hours` can represent them.
-When there is only one fixed performance/session, store its exact local start datetime in `Availability`; do not duplicate that start time in `Hours`.
+Store the known date or datetime window in `Availability`, preserving the precision supported by the sources.
+When a recurring schedule or choice of sessions applies within that window, put the schedule in `Hours`.
+Use a single date or datetime when only one endpoint is known.
 
 Date/time rules
 - Preserve the event's local timezone.
@@ -267,12 +264,11 @@ Date/time rules
 - Avoid UTC conversion mistakes that shift the calendar date.
 
 #### `Hours`
-Human-readable public opening/event/session hours.
 If opening/starting times are not clearly listed, research using the live booking flow, but do not infer published opening/closing hours from the slot list.
 Do not extrapolate public hours from a personal booking.
 Notice patterns and break it down by days.
 For scheduled performance-like events with multiple selectable performances/sessions, put the starting time(s) only; `Length` implies end time.
-For a single fixed performance/session, leave `Hours` empty, because `Availability` records the exact timings.
+Record only timing details that add to `Availability`.
 For weekday names use Mon/Tue/Wed/Thu/Fri/Sat/Sun/Bank (Bank is Bank Holidays)
 Always use 24 hour clock. Omit :00 in time ranges, but include when it's just a starting time.
 
@@ -441,7 +437,7 @@ Confirm all of the following:
 - A duplicate search was performed.
 - The current Go-list schema was fetched.
 - `Availability` and `Visit` were not conflated; dates and course ranges were reconciled with their sources.
-- `Hours` contains event/opening hours when known, except for a single fixed performance/session whose start datetime is stored in `Availability`.
+- Known event times and opening hours are recorded in `Availability` and `Hours` according to the rules above.
 - `Length` was researched and stored when a reliable duration is available.
 - Surprising restrictions or conflicting schedules were checked against current booking evidence and dated sources where available.
 - `Location` is as precise as the evidence permits, while `Place` uses an existing broader relation.
