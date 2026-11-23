@@ -247,7 +247,7 @@ This is the **event/experience availability window**, not the user's personal vi
 Don't assume an experience was available only on the user's visit date.
 Research its availability separately; leave it blank if unknown.
 For exhibitions/plays research when the opening or relaunch date was and backdate if necessary.
-For indefinitely open attraction, set the end date to the rolling-booking-horizon currently available.
+For indefinitely open attraction, set the end date to the rolling booking-horizon currently available.
 (This intentionally lets the entry surface near the horizon so the user can book or re-research it; extend the end date when later research shows more dates.)
 
 Examples:
